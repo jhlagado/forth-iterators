@@ -2,8 +2,43 @@
 : expect_else ." ERROR: expected " . ." got " . cr ;
 : expect 2dup = if expect_then else expect_else then cr ;
 
+10 constant HEAP_SIZE 
+4 constant TUPLE_SIZE
+
+0 value heap_start
+0 value heap_end
+0 value heap_ptr
+0 value free_ptr
+
 : tuple_get cells + @ ;        \ (adr ofs -- value )
 : tuple_set cells + ! ;        \ (value adr ofs -- ) 
+: >tuple dup TUPLE_SIZE + do i ! -1 +loop ;
+
+: theap_init 
+  here to heap_start
+  here to heap_ptr
+  THEAP_SIZE TUPLE_SIZE * allot
+  here to heap_end
+;
+
+: theap_new                         \ n n n -- adr
+  free_ptr if                       \ if free_ptr is not NULL
+    free_ptr dup                    \ save old free_ptr
+    @ to free_ptr                   \ get ptr in tuple index 0
+                                    \ and store in free_ptr
+                                    \ and return old heap_ptr
+  else
+    heap_ptr dup                    \ save old heap_ptr
+    cell TUPLE_SIZE * + to heap_ptr \ increase heaptr
+                                    \ and return old heap_ptr
+  then
+  >r
+  >tuple                            \ initialize tuple from stack
+  r>
+;
+
+: theap_free 
+;
 
 : pair! tuck 1 tuple_set ! ;       \ (n n adr -- )
 : pair> dup @ swap 1 tuple_get ;   \ (adr -- n n)
@@ -12,9 +47,9 @@
 \ test
 1 2 pair pair>  - -1 expect
 
-: triple! tuck 2 tuple_set tuck 1 tuple_set ! ;            \ (n n n adr -- )
-: triple> dup @ swap dup 1 tuple_get swap 2 tuple_get ;    \ (adr -- n n n)
-: triple -rot swap here >r , , , r> ;                      \ (n n n -- adr)
+: triple! tuck 2 tuple_set tuck 1 tuple_set ! ;         \ (n n n adr -- )
+: triple> dup @ swap dup 1 tuple_get swap 2 tuple_get ; \ (adr -- n n n)
+: triple -rot swap here >r , , , r> ;                   \ (n n n -- adr)
 
 \ test
 1 2 3 triple triple>  - + 0 expect

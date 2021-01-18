@@ -1,15 +1,23 @@
-: pair! 1 cells + dup -rot ! cell- ! ; \ (n n n adr -- )
-: pair> 1 cells + dup @ >r cell- @ r> ; \ (adr -- n n n)
-: pair here dup >r 2 cells allot pair! r> ;  \ (n n -- adr)
+: expect_then drop drop ." OK" ;
+: expect_else ." ERROR: expected " . ." got " . cr ;
+: expect 2dup = if expect_then else expect_else then cr ;
 
-1 2 pair pair> + 3 = . cr
+: tuple_get cells + @ ;        \ (adr ofs -- value )
+: tuple_set cells + ! ;        \ (value adr ofs -- ) 
 
-: triple! 2 cells + dup -rot ! cell- dup -rot ! cell- ! ; \ (n n n adr -- )
-: triple> 2 cells + dup @ >r cell- dup @ >r cell- @ r> r> ; \ (adr -- n n n)
-: triple here dup >r 3 cells allot triple! r> ;  \ (n n n -- adr)
+: pair! tuck 1 tuple_set ! ;       \ (n n adr -- )
+: pair> dup @ swap 1 tuple_get ;   \ (adr -- n n)
+: pair swap here >r , , r> ;       \ (n n -- adr)
 
 \ test
-1 2 3 triple triple> + + 6 = . cr
+1 2 pair pair>  - -1 expect
+
+: triple! tuck 2 tuple_set tuck 1 tuple_set ! ;            \ (n n n adr -- )
+: triple> dup @ swap dup 1 tuple_get swap 2 tuple_get ;    \ (adr -- n n n)
+: triple -rot swap here >r , , , r> ;                      \ (n n n -- adr)
+
+\ test
+1 2 3 triple triple>  - + 0 expect
 
 : range_iter                        \ iter -- val done?
 dup @ >r                                           
@@ -25,7 +33,7 @@ cell+ @ r> dup rot =
 : foreach                           \ <iterator> foreach <effect> 
 ' >r                                \ store effect
 begin
-  dup 2 cells + @ execute           \ execute iter_proc
+  dup 2 tuple_get execute           \ execute iter_proc
   invert                            \ if done terminate
 while
   r> dup >r execute                 \ execute effect
@@ -37,38 +45,18 @@ drop                                \ drop iter
 
 \ test
 : dup. dup . . ;
-0 10 range foreach dup.
+0 10 range foreach dup. cr
 
 \ gets next state from an iterator
 \ this proc is to enable inversion of control 
 : iterate                                     \ iter -- val done
-dup 2 cells + @                               \ iter iter_proc
+dup 2 tuple_get                               \ iter iter_proc
 execute                                       \ value done?
 ' execute
 ;
 
 : 2print . . ;                      \ print top 2 items
 0 3 range iterate 2print iterate 2print iterate 2print drop cr
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

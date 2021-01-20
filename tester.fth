@@ -17,7 +17,7 @@
 ;
 
 \ compute h1 by hashing x1 and h0
-: hash ( x1 h0 -- h1 )
+: hash2 ( x1 h0 -- h1 )
  swap 1+ xor
 ;
 
@@ -27,7 +27,7 @@
  BEGIN
  dup 0 >
  WHILE
- swap R> hash >R
+ swap R> hash2 >R
  1-
  REPEAT
  drop R>

@@ -11,3 +11,11 @@ r> drop                             \ rdrop effect
 drop                                \ drop last value
 drop                                \ drop iter
 ;
+
+: dup. dup . . ;
+
+: test_foreach 
+  cr ." test foreach" cr
+  0 10 range ['] dup. foreach cr
+;
+

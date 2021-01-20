@@ -1,8 +1,8 @@
-( n n n adr -- )
-: triple! tuck 2 []! tuck 1 []! ! ;         
+: >triple 3 >[] ;                 \ n n adr -- 
+: triple> 3 []> ;                 \ adr -- n n
+: triple here dup >r >triple r> ; \ n n -- adr
 
-( adr -- n n n)
-: triple> dup @ swap dup 1 []@ swap 2 []@ ; 
-
-( n n n -- adr)
-: triple -rot swap here >r , , , r> ;       
+: test_triple 
+  cr ." test triple" cr
+  1 2 3 triple triple>  - + 0 assert
+;

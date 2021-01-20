@@ -1,2 +1,2 @@
 language = "bash"
-run = "gforth main.fth -e bye"
+run = "gforth main.fth # -e bye"

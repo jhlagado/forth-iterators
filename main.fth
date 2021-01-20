@@ -1,63 +1,9 @@
-: expect_then drop drop ." OK" ;
-: expect_else ." ERROR: expected " . ." got " . cr ;
-: expect 2dup = if expect_then else expect_else then cr ;
-
-: []@ cells + @ ;                  \ adr ofs -- value 
-: []! cells + ! ;                  \ value adr ofs --  
-: >[] over + 1- do i ! -1 +loop ;  \ n1 n2 ... adr size --
-: []> over + swap do i @ loop ;    \ adr size -- n1 n2 ...
-
-10 constant HEAP_SIZE 
-4 constant TUPLE_SIZE
-
-0 value heap_start
-0 value heap_end
-0 value heap_ptr
-0 value free_ptr
-
-: theap_init 
-  here to heap_start
-  here to heap_ptr
-  HEAP_SIZE TUPLE_SIZE * allot
-  here to heap_end
-;
-
-: >tuple TUPLE_SIZE >[] ;           \ adr
-
-: theap_new                         \ n n n -- adr
-  free_ptr if                       \ if free_ptr is not NULL
-    free_ptr dup                    \ save old free_ptr
-    @ to free_ptr                   \ get ptr in tuple index 0
-                                    \ and store in free_ptr
-                                    \ and return old heap_ptr
-  else
-    heap_ptr dup                    \ save old heap_ptr
-    cell TUPLE_SIZE * + to heap_ptr \ increase heaptr
-                                    \ and return old heap_ptr
-  then
-  >r
-  >[]                            \ initialize tuple from stack
-  r>
-;
-
-: theap_free 
-;
-
-: pair! tuck 1 []! ! ;       \ (n n adr -- )
-: pair> dup @ swap 1 []@ ;   \ (adr -- n n)
-: pair swap here >r , , r> ;       \ (n n -- adr)
-
-: triple! tuck 2 []! tuck 1 []! ! ;         \ (n n n adr -- )
-: triple> dup @ swap dup 1 []@ swap 2 []@ ; \ (adr -- n n n)
-: triple -rot swap here >r , , , r> ;                   \ (n n n -- adr)
-
-: range_iter                        \ iter -- val done?
-dup @ >r                                           
-dup dup 1 swap +!                                  
-cell+ @ r> dup rot =               
-;
-
-: range ['] range_iter triple ;     \ n n -- iter
+include tester.fth
+include array.fth
+include theap.fth
+include pair.fth
+include triple.fth
+include range.fth
 
 : foreach                           \ iterator effect  
 >r                                  \ store effect
@@ -86,7 +32,7 @@ variable arr
 : dup. dup . . ;
 : 2print . . ;                      \ print top 2 items
 
- : test 
+: test 
   cr ." testing..." cr cr
   1 2 3 arr 3 >[] cr .s
   arr 3 []> cr 

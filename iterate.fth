@@ -1,8 +1,9 @@
 TUPLE_SIZE 1 - constant PROC_INDEX
 
-: iterate                              \ iterator -- val done
-dup PROC_INDEX []@                     \ iter_proc 
-execute                                \ value done?
+( iterator -- val done )
+: iterate                               
+  dup PROC_INDEX []@                     \ iter_proc 
+  execute                                \ value done?
 ;
 
 : test_iterate 

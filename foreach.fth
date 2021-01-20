@@ -1,4 +1,5 @@
-: foreach                           \ iterator effect  
+( iterator effect -- )
+: foreach                             
 >r                                  \ store effect
 begin
   iterate                           \ value done?
@@ -11,7 +12,7 @@ drop                                \ drop last value
 drop                                \ drop iter
 ;
 
-: dup. dup . . ;
+: dup. dup . . ;                    \ example effect
 
 : test_foreach 
   cr ." test foreach" cr

@@ -1,5 +1,6 @@
+\ depends on tuple.fth
+
 10 constant HEAP_SIZE 
-4 constant TUPLE_SIZE
 
 0 value heap_start
 0 value heap_end
@@ -12,8 +13,6 @@
   HEAP_SIZE TUPLE_SIZE * allot
   here to heap_end
 ;
-
-: >tuple TUPLE_SIZE >[] ;           \ adr
 
 : theap_new                         \ n n n -- adr
   free_ptr if                       \ if free_ptr is not NULL

@@ -5,8 +5,8 @@ include heap.fth
 include pair.fth
 include triple.fth
 include range.fth
-include foreach.fth
 include iterate.fth
+include foreach.fth
 
 test_array 
 test_pair
@@ -15,4 +15,5 @@ test_range
 test_iterate
 test_foreach
 
+cr .s
 cr cr cr 

@@ -1,8 +1,7 @@
-\ gets next state from an iterator
-\ this proc is to enable inversion of control 
+TUPLE_SIZE 1 - constant PROC_INDEX
 
 : iterate                              \ iterator -- val done
-dup 2 []@                              \ iter_proc 
+dup PROC_INDEX []@                     \ iter_proc 
 execute                                \ value done?
 ;
 

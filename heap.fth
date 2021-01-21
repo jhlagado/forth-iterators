@@ -1,34 +1,36 @@
 \ depends on tuple.fth
 
-10 constant HEAP_SIZE 
+0 constant NULL
+10 constant HEAP_SIZE               \ capacity in tuples
 
 0 value heap_start
 0 value heap_end
 0 value heap_ptr
 0 value free_ptr
 
-: theap_init 
-  here to heap_start
-  here to heap_ptr
-  HEAP_SIZE TUPLE_SIZE * allot
+: heap_init 
+  HEAP_SIZE TUPLE_SIZE * []         \ array capacity * tuple size
+  dup to heap_start                 \ adr  
+  to heap_ptr                       \ heap ptr to start
   here to heap_end
+  NULL to free_ptr
 ;
 
-: theap_new                         \ n n n -- adr
+: heap_new                          \ n... -- adr
   free_ptr if                       \ if free_ptr is not NULL
     free_ptr dup                    \ save old free_ptr
     @ to free_ptr                   \ get ptr in tuple index 0
                                     \ and store in free_ptr
-                                    \ and return old heap_ptr
+                                    \ and return old free_ptr
   else
     heap_ptr dup                    \ save old heap_ptr
-    cell TUPLE_SIZE * + to heap_ptr \ increase heaptr
+    TUPLE_SIZE cells + to heap_ptr  \ increase heaptr by tuple size
                                     \ and return old heap_ptr
   then
   >r
-  >[]                            \ initialize tuple from stack
+  >tuple                            \ initialize tuple from stack
   r>
 ;
 
-: theap_free 
+: heap_free 
 ;

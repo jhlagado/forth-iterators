@@ -1,4 +1,4 @@
-include tester.fth
+include assert.fth
 include array.fth
 include tuple.fth
 include heap.fth

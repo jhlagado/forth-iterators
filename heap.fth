@@ -49,12 +49,29 @@
   to free_ptr                       \ >>>> adr -> free_ptr
 ;
 
+0  value t1
+0  value t2
+0  value t3
+0  value t4
 : test_heap 
   cr ." test heap" cr
   2 heap_init 
   heap_end heap_start - 2 TUPLE_CELLS * assert
   heap_isfull false assert
-  0 0 0 0 heap_new
+  0 0 0 0 heap_new to t1
   heap_ptr heap_start - TUPLE_CELLS assert
+  heap_isfull false assert
+  0 0 0 0 heap_new to t2
+  heap_isfull true assert
+  t1 heap_free
+  heap_isfull false assert
+  0 0 0 0 heap_new to t3
+  heap_isfull true assert
+  t1 t3 = true assert
+  t2 heap_free
+  heap_isfull false assert
+  0 0 0 0 heap_new to t4
+  heap_isfull true assert
+  t2 t4 = true assert
 ;
 

@@ -1,4 +1,3 @@
-TUPLE_SIZE 1 - constant PROC_INDEX
 
 ( iterator -- val done )
 : iterate                               

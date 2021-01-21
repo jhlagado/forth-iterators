@@ -41,8 +41,8 @@
 
 0 value test_arr
 : test_array 
-  1000 [] to test_arr 
   cr ." test array" cr
+  1000 [] to test_arr 
   1 2 3 
   test_arr 3 >[] 
   test_arr 3 []>  

@@ -1,36 +1,60 @@
-\ depends on tuple.fth
+\ depends on tuple
 
 0 constant NULL
-10 constant HEAP_SIZE               \ capacity in tuples
 
 0 value heap_start
 0 value heap_end
 0 value heap_ptr
 0 value free_ptr
 
-: heap_init 
-  HEAP_SIZE TUPLE_SIZE * []         \ array capacity * tuple size
+\ allot a new heap and init ptrs    ( size -- ) 
+: heap_init                         \ size is number of tuples
+  TUPLE_SIZE * []                   \ array capacity * tuple size
   dup to heap_start                 \ adr  
   to heap_ptr                       \ heap ptr to start
   here to heap_end
   NULL to free_ptr
 ;
 
-: heap_new                          \ n... -- adr
-  free_ptr if                       \ if free_ptr is not NULL
-    free_ptr dup                    \ save old free_ptr
-    @ to free_ptr                   \ get ptr in tuple index 0
-                                    \ and store in free_ptr
-                                    \ and return old free_ptr
+\ checks if heap has free space     \ ( -- flag) 
+: heap_isfull
+  free_ptr if                       
+    false                           \ free list is not empty
   else
-    heap_ptr dup                    \ save old heap_ptr
-    TUPLE_SIZE cells + to heap_ptr  \ increase heaptr by tuple size
-                                    \ and return old heap_ptr
+    heap_end heap_ptr <=            \ check if room left on heap
   then
-  >r
-  >tuple                            \ initialize tuple from stack
-  r>
 ;
 
-: heap_free 
+\ allocate a tuple from heap        ( n... -- adr )
+: heap_new                          
+  heap_isfull 
+    abort" Out of heap space"
+  free_ptr if                       \ if free list is not empty
+    free_ptr dup                    \ free_ptr free_ptr
+    @ to free_ptr                   \ free_ptr[0] -> free_ptr 
+  else
+    heap_ptr dup                    \ heap_ptr heap_ptr
+    TUPLE_CELLS +                   \ heap_ptr heap_ptr+tuple
+    to heap_ptr                     \ -> heap_ptr
+  then
+  dup >r                            \ adr >>> save copy
+  >tuple                            \ initialize tuple from stack
+  r>                                \ adr
 ;
+
+\ free tuple, add to free list      ( adr -- )
+: heap_free                          
+  dup                               \ adr adr
+  free_ptr swap !                   \ adr >>>> free_ptr -> adr[0]
+  to free_ptr                       \ >>>> adr -> free_ptr
+;
+
+: test_heap 
+  cr ." test heap" cr
+  2 heap_init 
+  heap_end heap_start - 2 TUPLE_CELLS * assert
+  heap_isfull false assert
+  0 0 0 0 heap_new
+  heap_ptr heap_start - TUPLE_CELLS assert
+;
+

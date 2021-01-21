@@ -9,6 +9,7 @@ include iterate.fth
 include foreach.fth
 
 test_array 
+test_heap 
 test_pair
 test_triple
 test_range

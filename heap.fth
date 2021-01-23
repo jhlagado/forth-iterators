@@ -25,7 +25,7 @@
   then
 ;
 
-\ allocate a tuple from heap        ( n... -- adr )
+\ allocate a tuple from heap        ( -- adr )
 : heap_new                          
   heap_isfull 
     abort" Out of heap space"
@@ -37,7 +37,6 @@
     TUPLE_CELLS +                   \ heap_ptr heap_ptr+tuple
     to heap_ptr                     \ -> heap_ptr
   then
-  tuple                            \ initialize tuple from stack
 ;
 
 \ free tuple, add to free list      ( adr -- )
@@ -56,19 +55,19 @@
   2 heap_init 
   heap_end heap_start - 2 TUPLE_CELLS * assert
   heap_isfull false assert
-  0 0 0 0 heap_new to t1
+  0 0 0 0 heap_new tuple to t1
   heap_ptr heap_start - TUPLE_CELLS assert
   heap_isfull false assert
-  0 0 0 0 heap_new to t2
+  0 0 0 0 heap_new tuple to t2
   heap_isfull true assert
   t1 heap_free
   heap_isfull false assert
-  0 0 0 0 heap_new to t3
+  0 0 0 0 heap_new tuple to t3
   heap_isfull true assert
   t1 t3 = true assert
   t2 heap_free
   heap_isfull false assert
-  0 0 0 0 heap_new to t4
+  0 0 0 0 heap_new tuple to t4
   heap_isfull true assert
   t2 t4 = true assert
 ;

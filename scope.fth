@@ -5,24 +5,23 @@ TUPLE_SIZE 1 - constant SCOPE_LINK_INDEX
 0 value scope_ptr 
 
 \ link tuple to scope 
-: with(                               \ (adr --)
-  dup scope_ptr swap                  \ adr swap adr
+: link_scope                          \ (adr --)
+  dup scope_ptr swap                  \ adr scope_ptr adr
   SCOPE_LINK_INDEX >[]                \ adr >>>> adr[3] = scope_ptr
   to scope_ptr                        \ scope_ptr = adr
 ;
 
 \ unlink tuple from scope
-: )with  
-  scope_ptr dup 
+: unlink_scope  
+  scope_ptr dup                       \ save old scope_ptr
   3 []@ to scope_ptr
 ;
 
 \ allocates a new scope 
-\ and inits a, b, c from stack
-: s(abc  
+: s(abc                               \ n n n --- adr 
   heap_isfull
     abort" Cannot create scope"
-  scope_ptr heap_new                  \ adr >>>> adr[3] = scope_ptr
+  scope_ptr heap_new tuple            \ adr >>>> adr[3] = scope_ptr
   to scope_ptr                        \ scope_ptr = adr
 ;
 
@@ -39,8 +38,7 @@ TUPLE_SIZE 1 - constant SCOPE_LINK_INDEX
 : s( 0 0 0 s(abc ;               \ adr
 
 : )s  
-  scope_ptr dup 
-  3 []@ to scope_ptr
+  unlink_scope
   heap_free
 ;
 

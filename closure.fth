@@ -16,7 +16,7 @@ TUPLE_SIZE 1 - constant PROC_INDEX
 : closure  
   heap_isfull
     abort" Cannot create closure"
-  heap_new                            
+  heap_new tuple                           
 ;
 
 \ run a closure                       \ adr

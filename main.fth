@@ -4,18 +4,15 @@ include tuple.fth
 include heap.fth
 include scope.fth
 include closure.fth
-include pair.fth
-include triple.fth
 include range.fth
 include iterate.fth
 include foreach.fth
 
 test_array 
 test_heap 
+test_tuple 
 test_scope 
 test_closure 
-test_pair
-test_triple
 test_range
 test_iterate
 test_foreach

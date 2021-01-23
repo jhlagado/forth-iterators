@@ -37,9 +37,7 @@
     TUPLE_CELLS +                   \ heap_ptr heap_ptr+tuple
     to heap_ptr                     \ -> heap_ptr
   then
-  dup >r                            \ adr >>> save copy
-  >tuple                            \ initialize tuple from stack
-  r>                                \ adr
+  tuple                            \ initialize tuple from stack
 ;
 
 \ free tuple, add to free list      ( adr -- )

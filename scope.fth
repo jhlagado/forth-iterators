@@ -1,6 +1,21 @@
 \ depends on heap (which needs to be initialized first)
 
+TUPLE_SIZE 1 - constant SCOPE_LINK_INDEX
+
 0 value scope_ptr 
+
+\ link tuple to scope 
+: with(                               \ (adr --)
+  dup scope_ptr swap                  \ adr swap adr
+  SCOPE_LINK_INDEX >[]                \ adr >>>> adr[3] = scope_ptr
+  to scope_ptr                        \ scope_ptr = adr
+;
+
+\ unlink tuple from scope
+: )with  
+  scope_ptr dup 
+  3 []@ to scope_ptr
+;
 
 \ allocates a new scope 
 \ and inits a, b, c from stack

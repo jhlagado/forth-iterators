@@ -10,10 +10,14 @@
   =                                     \ value done?
 ;
 
-: range 0 ['] range_iter here tuple ;   \ n n -- iter
+: range 0 ['] range_iter here tuple4 ;   \ n n -- iter
 
 : test_range 
   cr ." test range" cr
-  0 2 range range_iter . . range_iter . . range_iter . . drop cr
+  0 2 range 
+  range_iter . . 
+  range_iter . . 
+  range_iter . . 
+  drop cr
 ;
 

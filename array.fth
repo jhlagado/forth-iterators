@@ -7,11 +7,8 @@
   cells over +               
 ;    
 
-\ get value from offset                 ( adr ofs -- value )
-: []@ cells + @ ;                  
-
-\ set value at offset                   ( value adr ofs -- ) 
-: []! cells + ! ;                  
+\ get offset adress                     ( adr ofs -- value )
+: [] cells + ;                  
 
 \ stack items to array                  ( n1 n2 ... adr size -- )   
 : >[] 
@@ -33,7 +30,7 @@
 ;  
 
 \ Allocate an array                     ( size -- adr )
-: [] 
+: new[] 
   here >r                               \ save here
   cells allot                           \ allot size * cell 
   r>                                    \ return address of array
@@ -42,7 +39,7 @@
 0 value test_arr
 : test_array 
   cr ." test array" cr
-  1000 [] to test_arr 
+  1000 new[] to test_arr 
   1 2 3 
   test_arr 3 >[] 
   test_arr 3 []>  

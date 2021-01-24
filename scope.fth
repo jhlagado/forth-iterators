@@ -8,14 +8,14 @@
 \ link tuple to scope 
 : link_scope                            \ (adr --)
   dup scope_ptr swap                    \ adr scope_ptr adr
-  [last]!                               \ adr >>>> adr[3] = scope_ptr
+  [last] !                               \ adr >>>> adr[3] = scope_ptr
   to scope_ptr                          \ scope_ptr = adr
 ;
 
 \ unlink tuple from scope
 : unlink_scope  
   scope_ptr dup                         \ save old scope_ptr
-  [last]@ to scope_ptr
+  [last] @ to scope_ptr
 ;
 
 \ allocates a new scope 
@@ -44,11 +44,11 @@
 ;
 
 : >a scope_ptr ! ;                      \ ( -- n ) 
-: >b scope_ptr 1 []! ;
-: >c scope_ptr 2 []! ;
+: >b scope_ptr 1 [] ! ;
+: >c scope_ptr 2 [] ! ;
 : a> scope_ptr @ ;                      \ ( n -- )
-: b> scope_ptr 1 []@ ;
-: c> scope_ptr 2 []@ ;
+: b> scope_ptr 1 [] @ ;
+: c> scope_ptr 2 [] @ ;
 
 : test_scope_1 s(
   100 >a

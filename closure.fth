@@ -19,14 +19,14 @@
 
 \ run a closure                         \ adr
 : run
-  dup [last]@
+  dup [last] @
   execute
 ;  
 
 \ destroys a closure                    \ adr
 : destroy
   dup
-  [last]@
+  [last] @
   0 swap
   execute 
   heap_free

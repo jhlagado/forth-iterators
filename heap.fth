@@ -9,7 +9,7 @@
 
 \ allot a new heap and init ptrs        ( size -- ) 
 : heap_init                             \ size is number of tuples
-  TUPLE_SIZE * []                       \ array capacity * tuple size
+  TUPLE_SIZE * new[]                       \ array capacity * tuple size
   dup to heap_start                     \ adr  
   to heap_ptr                           \ heap ptr to start
   here to heap_end

@@ -1,7 +1,7 @@
 
 ( iterator -- val done )
 : iterate                               
-  dup [last]@                           \ iter_proc 
+  dup [last] @                           \ iter_proc 
   execute                               \ value done?
 ;
 

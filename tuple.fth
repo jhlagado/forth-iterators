@@ -6,8 +6,7 @@ TUPLE_SIZE 1 - constant TUPLE_LAST
 : tuple> TUPLE_SIZE []> ;               \ adr -- n n n
 : tuple dup >r >tuple r> ;              \ n n n adr -- adr
 
-: [last]@ TUPLE_LAST []@ ;              \ adr -- n
-: [last]! TUPLE_LAST []! ;              \ n adr -- 
+: [last] TUPLE_LAST [] ;                \ adr -- n
 
 : test_tuple 
     cr ." test tuple" cr

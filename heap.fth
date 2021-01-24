@@ -7,43 +7,43 @@
 0 value heap_ptr
 0 value free_ptr
 
-\ allot a new heap and init ptrs    ( size -- ) 
-: heap_init                         \ size is number of tuples
-  TUPLE_SIZE * []                   \ array capacity * tuple size
-  dup to heap_start                 \ adr  
-  to heap_ptr                       \ heap ptr to start
+\ allot a new heap and init ptrs        ( size -- ) 
+: heap_init                             \ size is number of tuples
+  TUPLE_SIZE * []                       \ array capacity * tuple size
+  dup to heap_start                     \ adr  
+  to heap_ptr                           \ heap ptr to start
   here to heap_end
   NULL to free_ptr
 ;
 
-\ checks if heap has free space     \ ( -- flag) 
+\ checks if heap has free space         \ ( -- flag) 
 : heap_isfull
   free_ptr if                       
-    false                           \ free list is not empty
+    false                               \ free list is not empty
   else
-    heap_end heap_ptr <=            \ check if room left on heap
+    heap_end heap_ptr <=                \ check if room left on heap
   then
 ;
 
-\ allocate a tuple from heap        ( -- adr )
+\ allocate a tuple from heap            ( -- adr )
 : heap_new                          
   heap_isfull 
     abort" Out of heap space"
-  free_ptr if                       \ if free list is not empty
-    free_ptr dup                    \ free_ptr free_ptr
-    @ to free_ptr                   \ free_ptr[0] -> free_ptr 
+  free_ptr if                           \ if free list is not empty
+    free_ptr dup                        \ free_ptr free_ptr
+    @ to free_ptr                       \ free_ptr[0] -> free_ptr 
   else
-    heap_ptr dup                    \ heap_ptr heap_ptr
-    TUPLE_CELLS +                   \ heap_ptr heap_ptr+tuple
-    to heap_ptr                     \ -> heap_ptr
+    heap_ptr dup                        \ heap_ptr heap_ptr
+    TUPLE_CELLS +                       \ heap_ptr heap_ptr+tuple
+    to heap_ptr                         \ -> heap_ptr
   then
 ;
 
-\ free tuple, add to free list      ( adr -- )
+\ free tuple, add to free list          ( adr -- )
 : heap_free                          
-  dup                               \ adr adr
-  free_ptr swap !                   \ adr >>>> free_ptr -> adr[0]
-  to free_ptr                       \ >>>> adr -> free_ptr
+  dup                                   \ adr adr
+  free_ptr swap !                       \ adr >>>> free_ptr -> adr[0]
+  to free_ptr                           \ >>>> adr -> free_ptr
 ;
 
 0  value t1

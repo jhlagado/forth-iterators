@@ -1,51 +1,52 @@
 \ depends on heap (which needs to be initialized first)
-
-TUPLE_SIZE 1 - constant SCOPE_LINK_INDEX
+\ scopes are tuples which are linked together with pointers 
+\ in the last index (TUPLE_LAST). A pointer to the head of 
+\ this list is stored in scope_ptr
 
 0 value scope_ptr 
 
 \ link tuple to scope 
-: link_scope                          \ (adr --)
-  dup scope_ptr swap                  \ adr scope_ptr adr
-  SCOPE_LINK_INDEX >[]                \ adr >>>> adr[3] = scope_ptr
-  to scope_ptr                        \ scope_ptr = adr
+: link_scope                            \ (adr --)
+  dup scope_ptr swap                    \ adr scope_ptr adr
+  [last]!                               \ adr >>>> adr[3] = scope_ptr
+  to scope_ptr                          \ scope_ptr = adr
 ;
 
 \ unlink tuple from scope
 : unlink_scope  
-  scope_ptr dup                       \ save old scope_ptr
-  3 []@ to scope_ptr
+  scope_ptr dup                         \ save old scope_ptr
+  [last]@ to scope_ptr
 ;
 
 \ allocates a new scope 
-: s(abc                               \ n n n --- adr 
+: s(abc                                 \ n n n --- adr 
   heap_isfull
     abort" Cannot create scope"
-  scope_ptr heap_new tuple            \ adr >>>> adr[3] = scope_ptr
-  to scope_ptr                        \ scope_ptr = adr
+  scope_ptr heap_new tuple              \ adr >>>> adr[3] = scope_ptr
+  to scope_ptr                          \ scope_ptr = adr
 ;
 
 \ allocates a new scope 
 \ and inits a, b from stack. c with 0
-: s(ab 0 s(abc ;                  \ adr
+: s(ab 0 s(abc ;                        \ adr
 
 \ allocates a new scope 
 \ and inits a from stack. b, c with 0
-: s(a 0 0 s(abc ;                \ adr
+: s(a 0 0 s(abc ;                       \ adr
 
 \ allocates a new scope 
 \ and inits a, b, c with 0
-: s( 0 0 0 s(abc ;               \ adr
+: s( 0 0 0 s(abc ;                      \ adr
 
 : )s  
   unlink_scope
   heap_free
 ;
 
-: >a scope_ptr ! ;                        \ ( -- n ) 
+: >a scope_ptr ! ;                      \ ( -- n ) 
 : >b scope_ptr 1 []! ;
 : >c scope_ptr 2 []! ;
-: a> scope_ptr @ ;                        \ ( n -- )
+: a> scope_ptr @ ;                      \ ( n -- )
 : b> scope_ptr 1 []@ ;
 : c> scope_ptr 2 []@ ;
 

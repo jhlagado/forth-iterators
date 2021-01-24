@@ -1,8 +1,8 @@
 
 ( iterator -- val done )
 : iterate                               
-  dup PROC_INDEX []@                     \ iter_proc 
-  execute                                \ value done?
+  dup [last]@                           \ iter_proc 
+  execute                               \ value done?
 ;
 
 : test_iterate 

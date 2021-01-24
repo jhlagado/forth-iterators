@@ -19,7 +19,8 @@
 
 \ run a closure                         \ adr
 : run
-  dup [last] @
+  dup [last] @                          \ adr proc
+  1 swap                                \ adr 1 proc 
   execute
 ;  
 
@@ -33,11 +34,10 @@
 ;  
 
 : test_proc 
-  dup if 
-    tuple4> drop
-    . . .
+  if 
+    tuple4> drop                        \ n n n
+    . . .                               
   else
-    drop                                \ drop the zero param
     drop                                \ drop the adr
     ." destroy!"
   then 

@@ -2,20 +2,21 @@
 : foreach                             
 >r                                      \ store effect
 begin
-  iterate                               \ value done?
+  dup run                               \ iter value done?
   invert                                \ if done terminate
 while
-  r> dup >r execute                     \ execute effect
+  r> dup >r execute                     \ execute effect on value
 repeat
-r> drop                                 \ drop the effect
 drop                                    \ drop last value
-drop                                    \ drop iter
+r> drop                                 \ drop the effect
 ;
 
 : dup. dup . . ;                        \ example effect
 
 : test_foreach 
   cr ." test foreach" cr
-  0 10 range ['] dup. foreach cr
+  0 10 range ['] dup. foreach 
+  destroy
+  cr
 ;
 

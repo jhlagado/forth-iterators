@@ -8,7 +8,7 @@ TUPLE4_SIZE 1 - constant TUPLE4_LAST
 : tuple4> TUPLE4_SIZE []> ;               \ adr -- n n n
 : tuple4 dup >r >tuple4 r> ;              \ n n n adr -- adr
 
-: [last] TUPLE4_LAST [] ;                \ adr -- n
+: [last] TUPLE4_LAST [] ;                 \ adr -- n
 
 : test_tuple 
     cr ." test tuple4" cr

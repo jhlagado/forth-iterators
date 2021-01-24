@@ -14,7 +14,7 @@ test_tuple
 test_scope 
 test_closure 
 test_range
-test_iterate
+\ test_iterate
 test_foreach
 
 cr .s

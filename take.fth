@@ -18,7 +18,7 @@
       1 swap +!                           \ iter  >>>>   iter[2]++  
       1 [] @                              \ limit 
       r>                                  \ limit index
-      = r> or                             \ DONE  (ie. done? || done0?)
+      <= r> or                            \ DONE  (ie. done? || done0?)
       r> swap                             \ value0 DONE
     endof
   endcase 
@@ -28,7 +28,7 @@
 
 : test_take 
   cr ." test take" cr
-  0 ['] 1+ iterate 2 take 
+  0 1 ['] + iterate 2 take 
   dup run . . 
   dup run . . 
   dup run . . 

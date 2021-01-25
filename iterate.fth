@@ -10,21 +10,22 @@
       ." destroy iterate!"
     endof
     1 of 
-      dup dup                             \ iter iter iter  
-      @ dup >r                            \ iter iter value  >>>>   save value   
-      swap 1 [] @                         \ iter value func
-      execute                             \ iter value'
-      swap !
+      dup @ dup >r swap                   \ value iter >>>> save value   
+      dup 1 [] @ swap                     \ value arg iter
+      dup 2 [] @ swap                     \ value arg func iter
+      >r                                  \ value arg func >>>> save iter
+      execute                             \ value'
+      r> !                                \ >>>> iter[0] = value'
       r> 0                                \ value notdone
     endof
   endcase 
 ;
 
-: iterate 0 ['] iterate_iter closure ;     \ initial func -- iter
+: iterate ['] iterate_iter closure ;     \ initial arg func -- iter
 
 : test_iterate 
   cr ." test iterate" cr
-  0 ['] 1+ iterate 
+  0 2 ['] + iterate 
   dup run . . 
   dup run . . 
   dup run . . 

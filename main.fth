@@ -17,7 +17,7 @@ test_scope
 test_closure 
 test_iterate
 test_take
-\ test_range
+test_range
 \ test_foreach
 \ test_map
 

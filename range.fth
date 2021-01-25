@@ -2,16 +2,17 @@
 \ each iteration inc value by step and then compares value with limit
 
 : range                                 \ start end step -- iter
-  swap >r                               \ start inc >>>> save end
-  over >r                               \ start inc >>>> save start
+  -rot over -                           \ step start amount
+  >r swap                               \ start step >>>> amount
   ['] +                                 \ increment function
   iterate                               \ iter 
-  r> r> swap - take                     \ take <end>
+  r> 
+  take                               \ take <end>
 ;
 
 : test_range 
   cr ." test range" cr
-  1 2 1 range 
+  1 3 1 range 
   dup run . . 
   dup run . . 
   dup run . . 

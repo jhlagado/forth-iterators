@@ -6,7 +6,7 @@
 : take_iter                            \ iter -- val done?
   case 
     0 of
-      drop                                \ drop the adr
+      @ destroy
       ." destroy take!"
     endof
     1 of 

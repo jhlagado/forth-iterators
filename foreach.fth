@@ -15,7 +15,7 @@
 
 : test_foreach 
   cr ." test foreach" cr
-  0 10 range ['] dup. foreach 
+  0 10 1 range ['] dup. foreach 
   destroy
   cr
 ;

@@ -21,7 +21,7 @@
 
 : test_map 
   cr ." test map" cr
-  0 2 range ['] add10 map 
+  0 2 1 range ['] add10 map 
   dup run . .
   dup run . .
   dup run . .

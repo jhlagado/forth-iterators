@@ -17,3 +17,8 @@
 \ ' getc
 \ ' proxy_get
 \ piter .S
+
+: tap
+  dup ." --->" .
+;
+

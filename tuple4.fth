@@ -4,9 +4,9 @@
 TUPLE4_SIZE cells constant TUPLE4_CELLS
 TUPLE4_SIZE 1 - constant TUPLE4_LAST
 
-: >tuple4 TUPLE4_SIZE >[] ;               \ n n n adr -- 
-: tuple4> TUPLE4_SIZE []> ;               \ adr -- n n n
-: tuple4 dup >r >tuple4 r> ;              \ n n n adr -- adr
+: >tuple4 TUPLE4_SIZE >[] ;               \ n n n n adr -- 
+: tuple4> TUPLE4_SIZE []> ;               \ adr -- n n n n
+: tuple4 dup >r >tuple4 r> ;              \ n n n n adr -- adr
 
 : [last] TUPLE4_LAST [] ;                 \ adr -- n
 

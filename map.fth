@@ -1,5 +1,10 @@
 : map_iter                              \ iter -- val done?
   case 
+    0 of
+      drop                                \ drop arg
+      drop                                \ drop adr
+      ." init map!"
+    endof
     1 of 
       drop                                \ drop arg
       dup                                 \ iter iter[0]  
@@ -24,9 +29,10 @@
 : test_map 
   cr cr ." test map" cr
   0 2 1 range ['] add10 map 
-  dup 0 run . .
-  dup 0 run . .
-  dup 0 run . .
+  dup 0 init
+  dup 0 run 0 assert 10 assert
+  dup 0 run 0 assert 11 assert
+  dup 0 run -1 assert 12 assert
   0 destroy
   cr
 ;

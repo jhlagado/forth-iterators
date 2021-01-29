@@ -15,11 +15,8 @@
       r> !                                \ >>>> iter[0] = value'
       r> 0                                \ value notdone
     endof
-    2 of
-      drop                                \ drop arg
-      drop                                \ drop adr
-      ." destroy iterate!"
-    endof
+    drop                                \ drop arg
+    drop                                \ drop adr
   endcase 
 ;
 

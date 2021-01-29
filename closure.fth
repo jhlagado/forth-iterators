@@ -2,13 +2,11 @@
 
 \ a closure is a tuple4 which has a ptr to a procedure in
 \ its last index (TUPLE4_LAST). Normally a closure is
-\ executed by passing its address on the stack and calling run
-\ the run task consumes the adr of the closure
-
-\ a closure may also be run a destroy task, where the procedure
-\ is executed with a 2 on the top of stack
-\ the destroy must not consume the adr of the closure 
-\ but instead pass it back to destroy
+\ executed by passing its address on the stack, an arg and a signal
+\ a signal can be 0 = INIT, 1 = RUN, 2 = DESTROY
+\ and calling send
+\ the procedure must deal with all three cases or by default pop the
+\ address and arg from the stack
 
 \ new closure                           \ n1 n2 n3 proc -- adr
 : closure  
@@ -17,26 +15,24 @@
   heap4_new tuple4                           
 ;
 
-\ init a closure                        \ adr arg
-: init
+\ send a signal to closure              \ adr arg type
+: send
+  >r                                    \ adr arg >>>> save type
   over [last] @                         \ adr arg proc
-  0 swap                                \ adr arg 0 proc 
+  r> swap                               \ adr arg type proc 
   execute
 ; 
 
+\ init a closure                        \ adr arg
+: init 0 send ; 
+
 \ run a closure                         \ adr arg
-: run
-  over [last] @                         \ adr arg proc
-  1 swap                                \ adr arg 1 proc 
-  execute
-; 
+: run 1 send ; 
 
 \ destroys a closure                    \ adr arg
 : destroy
   over >r                               \ adr arg
-  over [last] @                         \ adr arg proc
-  2 swap                                \ adr arg 0 proc
-  execute                               
+  2 send
   r> heap4_free
 ;  
 
@@ -47,11 +43,8 @@
       tuple4> drop                        \ n n n
       3 assert 2 assert 1 assert                              
     endof
-    2 of
-      drop                                \ drop arg
-      drop                                \ drop adr
-      ." destroy closure!"
-    endof
+    drop                                \ drop arg
+    drop                                \ drop adr
   endcase
 ;
 
@@ -59,8 +52,8 @@
   100 heap4_init 
   cr cr ." test closure" cr
   1 2 3 ['] test_proc closure
-  dup 
-  0 run 
+  dup 0 init 
+  dup 0 run 
   0 destroy
   cr
 ;

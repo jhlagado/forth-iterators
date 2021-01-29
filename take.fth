@@ -5,7 +5,7 @@
 
 : take_iter                            \ iter -- val done?
   case 
-    0 of
+    2 of
       @ destroy
       ." destroy take!"
     endof

@@ -2,7 +2,7 @@ include assert.fth
 include array.fth
 include tuple4.fth
 include heap4.fth
-include scope2.fth
+include scope.fth
 include closure.fth
 include iterate.fth
 include take.fth

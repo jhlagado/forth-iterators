@@ -5,7 +5,7 @@
 
 : iterate_iter                            \ iter -- val done?
   case 
-    0 of
+    2 of
       drop                                \ drop the adr
       ." destroy iterate!"
     endof

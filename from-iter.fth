@@ -1,19 +1,18 @@
-: fromIter_proc                         \ start sink 
-
+: fromIter_proc                         \ start sink -- 
+    swap invert if                      \ sink >>>>  if start == 0 
+    s(                                     
+        >a                              \ a=sink
+        0 0 0 0 tuple4 >b               \ b=[inloop got1 completed res]
+    )s
+    then
 ;
 
 : fromIter                              \ iter -- closure
-    0 0 0 0 tuple4                      \ iter tuple
     0 0 ['] fromIter_proc closure
 ;
 
-
-const fromIter = iter => (start, sink) => {
+const fromIter = iterator => (start, sink) => {
   if (start !== 0) return;
-  const iterator =
-    typeof Symbol !== 'undefined' && iter[Symbol.iterator]
-      ? iter[Symbol.iterator]()
-      : iter;
   let inloop = false;
   let got1 = false;
   let completed = false;

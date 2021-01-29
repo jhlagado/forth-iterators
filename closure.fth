@@ -28,7 +28,7 @@
 : destroy
   dup                                   \ adr adr
   dup [last] @                          \ adr adr proc
-  0 swap                                \ adr adr 0 proc
+  2 swap                                \ adr adr 0 proc
   execute                               \ adr
   heap4_free
 ;  

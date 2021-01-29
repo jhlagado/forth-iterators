@@ -8,7 +8,7 @@
       drop                                \ drop arg
       dup                                 \ iter iter[0]  
       @                                   \ iter iter0
-      run >r                              \ iter value >>>> save done
+      0 run >r                              \ iter value >>>> save done
       swap 1 [] @                         \ value effect
       execute                             \ value1 done
       r>
@@ -21,11 +21,11 @@
 : add10 10 + ;                        \ example effect
 
 : test_map 
-  cr ." test map" cr
+  cr cr ." test map" cr
   0 2 1 range ['] add10 map 
-  dup run . .
-  dup run . .
-  dup run . .
+  dup 0 run . .
+  dup 0 run . .
+  dup 0 run . .
   destroy
   cr
 ;

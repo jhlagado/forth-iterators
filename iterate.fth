@@ -25,11 +25,11 @@
 : iterate ['] iterate_iter closure ;     \ initial arg func -- iter
 
 : test_iterate 
-  cr ." test iterate" cr
+  cr cr ." test iterate" cr
   0 2 ['] + iterate 
-  dup run . . 
-  dup run . . 
-  dup run . . 
+  dup 0 run 0 assert 0 assert 
+  dup 0 run 0 assert 2 assert 
+  dup 0 run 0 assert 4 assert 
   destroy  
   cr
 ;

@@ -11,7 +11,7 @@ TUPLE4_SIZE 1 - constant TUPLE4_LAST
 : [last] TUPLE4_LAST [] ;                 \ adr -- n
 
 : test_tuple 
-  cr ." test tuple4" cr
+  cr cr ." test tuple4" cr
   0 1 2 3 here tuple4 
   tuple4>  
   - + + 0 assert

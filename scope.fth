@@ -74,7 +74,7 @@
 )s ;
 
 : test_scope
-  cr ." test scope" cr
+  cr cr ." test scope" cr
   10 heap4_init 
   test_scope_1
   test_scope_1

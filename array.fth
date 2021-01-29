@@ -38,7 +38,7 @@
 
 0 value test_arr
 : test_array 
-  cr ." test array" cr
+  cr cr ." test array" cr
   1000 new[] to test_arr 
   1 2 3 
   test_arr 3 >[] 

@@ -11,11 +11,11 @@
 ;
 
 : test_range 
-  cr ." test range" cr
+  cr cr ." test range" cr
   1 3 1 range 
-  dup run . . 
-  dup run . . 
-  dup run . . 
+  dup 0 run 0 assert 1 assert 
+  dup 0 run 0 assert 2 assert 
+  dup 0 run -1 assert 3 assert 
   destroy  
 ;
 

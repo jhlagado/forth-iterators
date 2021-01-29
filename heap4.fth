@@ -52,7 +52,7 @@
 0  value t3
 0  value t4
 : test_heap4 
-  cr ." test heap4" cr
+  cr cr ." test heap4" cr
   2 heap4_init 
   heap4_end heap4_start - 2 TUPLE4_CELLS * assert
   heap4_isfull false assert

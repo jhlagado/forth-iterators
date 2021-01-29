@@ -12,7 +12,7 @@
     1 of 
       drop                                \ drop arg
       dup @                               \ iter iter0
-      run                                 \ iter value0 done0?  
+      0 run                                 \ iter value0 done0?  
       swap >r >r                          \ iter  >>>> save value0 done0 
       dup 2 []                            \ iter iter[2] 
       dup @ >r                            \ iter iter[2] >>>> save index
@@ -28,11 +28,11 @@
 : take 0 ['] take_iter closure ;          \ iter limit -- iter
 
 : test_take 
-  cr ." test take" cr
+  cr cr ." test take" cr
   0 1 ['] + iterate 2 take 
-  dup run . . 
-  dup run . . 
-  dup run . . 
+  dup 0 run 0 assert 0 assert 
+  dup 0 run 0 assert 1 assert 
+  dup 0 run -1 assert 2 assert 
   destroy 
   cr 
 ;

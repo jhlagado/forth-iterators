@@ -6,7 +6,7 @@
 \ the run task consumes the adr of the closure
 
 \ a closure may also be run a destroy task, where the procedure
-\ is executed with a 0 on the top of stack
+\ is executed with a 2 on the top of stack
 \ the destroy must not consume the adr of the closure 
 \ but instead pass it back to destroy
 
@@ -17,11 +17,18 @@
   heap4_new tuple4                           
 ;
 
-\ run a closure                         \ adr 
+\ init a closure                        \ adr arg
+: init
+  over [last] @                         \ adr arg proc
+  0 swap                                \ adr arg proc 
+  1 swap                                \ adr arg 1 proc 
+  execute
+; 
+
+\ run a closure                         \ adr arg
 : run
-  dup [last] @                          \ adr proc
-  0 swap                                \ adr 0 proc 
-  1 swap                                \ adr 0 1 proc 
+  over [last] @                         \ adr arg proc
+  1 swap                                \ adr arg 1 proc 
   execute
 ; 
 
@@ -43,17 +50,17 @@
     1 of 
       drop
       tuple4> drop                        \ n n n
-      . . .                               
+      3 assert 2 assert 1 assert                              
     endof
   endcase
 ;
 
 : test_closure 
   100 heap4_init 
-  cr ." test closure" cr
+  cr cr ." test closure" cr
   1 2 3 ['] test_proc closure
   dup 
-  run 
+  0 run 
   destroy
   cr
 ;

@@ -75,7 +75,7 @@
 ;
 
 : test_scope
-  cr ." test scope" cr
+  cr cr ." test scope" cr
   10 scopestack_init 
   test_scopestack_1
   1 2 test_scopestack_2

@@ -10,6 +10,7 @@
       ." destroy take!"
     endof
     1 of 
+      drop                                \ drop arg
       dup @                               \ iter iter0
       run                                 \ iter value0 done0?  
       swap >r >r                          \ iter  >>>> save value0 done0 

@@ -17,12 +17,13 @@
   heap4_new tuple4                           
 ;
 
-\ run a closure                         \ adr
+\ run a closure                         \ adr 
 : run
   dup [last] @                          \ adr proc
-  1 swap                                \ adr 1 proc 
+  0 swap                                \ adr 0 proc 
+  1 swap                                \ adr 0 1 proc 
   execute
-;  
+; 
 
 \ destroys a closure                    \ adr
 : destroy
@@ -34,18 +35,25 @@
 ;  
 
 : test_proc 
-  if 
-    tuple4> drop                        \ n n n
-    . . .                               
-  else
-    drop                                \ drop the adr
-    ." destroy!"
-  then 
+  case 
+    2 of
+      drop                                \ drop the adr
+      ." destroy closure!"
+    endof
+    1 of 
+      drop
+      tuple4> drop                        \ n n n
+      . . .                               
+    endof
+  endcase
 ;
 
 : test_closure 
+  100 heap4_init 
   cr ." test closure" cr
   1 2 3 ['] test_proc closure
-  dup run destroy 
+  dup 
+  run 
+  destroy
   cr
 ;

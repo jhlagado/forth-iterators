@@ -10,6 +10,7 @@
       ." destroy iterate!"
     endof
     1 of 
+      drop                                \ drop arg
       dup @ dup >r swap                   \ value iter >>>> save value   
       dup 1 [] @ swap                     \ value arg iter
       dup 2 [] @ swap                     \ value arg func iter

@@ -5,6 +5,7 @@
       ." destroy map!"
     endof
     1 of 
+      drop                                \ drop arg
       dup                                 \ iter iter[0]  
       @                                   \ iter iter0
       run >r                              \ iter value >>>> save done

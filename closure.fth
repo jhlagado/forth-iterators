@@ -31,13 +31,13 @@
   execute
 ; 
 
-\ destroys a closure                    \ adr 
+\ destroys a closure                    \ adr arg
 : destroy
-  dup                                   \ adr adr
-  dup [last] @                          \ adr adr proc
-  2 swap                                \ adr adr 0 proc
-  execute                               \ adr
-  heap4_free
+  over >r                               \ adr arg
+  over [last] @                         \ adr arg proc
+  2 swap                                \ adr arg 0 proc
+  execute                               
+  r> heap4_free
 ;  
 
 : test_proc 
@@ -48,7 +48,8 @@
       3 assert 2 assert 1 assert                              
     endof
     2 of
-      drop                                \ drop the adr
+      drop                                \ drop arg
+      drop                                \ drop adr
       ." destroy closure!"
     endof
   endcase
@@ -60,6 +61,6 @@
   1 2 3 ['] test_proc closure
   dup 
   0 run 
-  destroy
+  0 destroy
   cr
 ;

@@ -16,6 +16,6 @@
   dup 0 run 0 assert 1 assert 
   dup 0 run 0 assert 2 assert 
   dup 0 run -1 assert 3 assert 
-  destroy  
+  0 destroy  
 ;
 

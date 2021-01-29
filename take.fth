@@ -19,7 +19,8 @@
       r> swap                             \ value0 DONE
     endof
     2 of
-      @ destroy
+      drop                                \ drop arg
+      @ 0 destroy
       ." destroy take!"
     endof
   endcase 
@@ -33,6 +34,6 @@
   dup 0 run 0 assert 0 assert 
   dup 0 run 0 assert 1 assert 
   dup 0 run -1 assert 2 assert 
-  destroy 
+  0 destroy 
   cr 
 ;

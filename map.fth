@@ -10,7 +10,8 @@
       r>
     endof
     2 of
-      @ destroy
+      drop                                \ drop arg
+      @ 0 destroy
       ." destroy map!"
     endof
   endcase 
@@ -26,7 +27,7 @@
   dup 0 run . .
   dup 0 run . .
   dup 0 run . .
-  destroy
+  0 destroy
   cr
 ;
 

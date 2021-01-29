@@ -22,7 +22,7 @@
   x 2 assert 
   y 2 assert 
   c 3 assert 
-  destroy
+  0 destroy
   cr
 ;
 

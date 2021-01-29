@@ -5,10 +5,6 @@
 
 : take_iter                            \ iter -- val done?
   case 
-    2 of
-      @ destroy
-      ." destroy take!"
-    endof
     1 of 
       drop                                \ drop arg
       dup @                               \ iter iter0
@@ -21,6 +17,10 @@
       r>                                  \ limit index
       <= r> or                            \ DONE  (ie. done? || done0?)
       r> swap                             \ value0 DONE
+    endof
+    2 of
+      @ destroy
+      ." destroy take!"
     endof
   endcase 
 ;

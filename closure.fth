@@ -20,8 +20,7 @@
 \ init a closure                        \ adr arg
 : init
   over [last] @                         \ adr arg proc
-  0 swap                                \ adr arg proc 
-  1 swap                                \ adr arg 1 proc 
+  0 swap                                \ adr arg 0 proc 
   execute
 ; 
 
@@ -32,7 +31,7 @@
   execute
 ; 
 
-\ destroys a closure                    \ adr
+\ destroys a closure                    \ adr 
 : destroy
   dup                                   \ adr adr
   dup [last] @                          \ adr adr proc
@@ -43,14 +42,14 @@
 
 : test_proc 
   case 
-    2 of
-      drop                                \ drop the adr
-      ." destroy closure!"
-    endof
     1 of 
       drop
       tuple4> drop                        \ n n n
       3 assert 2 assert 1 assert                              
+    endof
+    2 of
+      drop                                \ drop the adr
+      ." destroy closure!"
     endof
   endcase
 ;

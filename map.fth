@@ -1,9 +1,5 @@
 : map_iter                              \ iter -- val done?
   case 
-    2 of
-      @ destroy
-      ." destroy map!"
-    endof
     1 of 
       drop                                \ drop arg
       dup                                 \ iter iter[0]  
@@ -12,6 +8,10 @@
       swap 1 [] @                         \ value effect
       execute                             \ value1 done
       r>
+    endof
+    2 of
+      @ destroy
+      ." destroy map!"
     endof
   endcase 
 ;

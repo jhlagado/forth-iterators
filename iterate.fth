@@ -5,6 +5,11 @@
 
 : iterate_iter                            \ iter -- val done?
   case 
+    0 of
+      drop                                \ drop arg
+      drop                                \ drop adr
+      ." init iterate!"
+    endof
     1 of 
       drop                                \ drop arg
       dup @ dup >r swap                   \ value iter >>>> save value   
@@ -15,8 +20,11 @@
       r> !                                \ >>>> iter[0] = value'
       r> 0                                \ value notdone
     endof
-    drop                                \ drop arg
-    drop                                \ drop adr
+    2 of
+      drop                                \ drop arg
+      drop                                \ drop adr
+      ." destroy iterate!"
+    endof
   endcase 
 ;
 

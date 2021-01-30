@@ -32,6 +32,17 @@
     0 0 ['] fromIter_proc closure       \   -- adr >>>> [iterator 0 0 fromIter_proc]
 ;
 
+const fromIter_sinkTalkback = () => (t) => {
+    if (completed) return
+
+    if (t === 1) {
+      got1 = true;
+      if (!inloop && !(res && res.done)) loop();
+    } else if (t === 2) {
+      completed = true;
+    }
+  }
+
 const fromIter = iterator => (start, sink) => {
   if (start !== 0) return;
   let inloop = false;
@@ -51,16 +62,7 @@ const fromIter = iterator => (start, sink) => {
     }
     inloop = false;
   }
-  sink(0, t => {
-    if (completed) return
-
-    if (t === 1) {
-      got1 = true;
-      if (!inloop && !(res && res.done)) loop();
-    } else if (t === 2) {
-      completed = true;
-    }
-  });
+  sink(0, );
 };
 
 const fromIter = iterator => (start, sink) => {

@@ -1,5 +1,5 @@
 type CB = (type: number, tb?: CB | string) => void;
-
+type Operation = (value: string) => void;
 interface State {
   completed: boolean;
   got1: boolean;
@@ -64,13 +64,23 @@ const fromIter = (iterator: any): CB => (
   send(sink as CB, 0, tb);
 };
 
+interface ForEachState {
+  talkback?: CB;
+}
+
+const tbSource = (
+  operation: Operation,
+  state: ForEachState
+): CB => (type, data) => {
+  if (type === 0) state.talkback = data as CB;
+  if (type === 1) operation(data as string);
+  if (type === 1 || type === 0) state.talkback?.(1);
+};
+
 const forEach = (operation: (value: string) => void) => (source: CB) => {
-  let talkback: CB;
-  source(0, (t, d) => {
-    if (t === 0) talkback = d as CB;
-    if (t === 1) operation(d as string);
-    if (t === 1 || t === 0) talkback(1);
-  });
+  const state: ForEachState = {};
+  const tb = tbSource(operation, state);
+  send(source, 0, tb);
 };
 
 const iterator = [10, 20, 30, 40][Symbol.iterator]();

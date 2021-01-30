@@ -38,13 +38,21 @@
 
 : test_proc 
   case 
+    0 of
+      drop                                \ drop arg
+      drop                                \ drop adr
+      ." init closure!"
+    endof
     1 of 
       drop
       tuple4> drop                        \ n n n
       3 assert 2 assert 1 assert                              
     endof
-    drop                                \ drop arg
-    drop                                \ drop adr
+    2 of
+      drop                                \ drop arg
+      drop                                \ drop adr
+      ." destroy closure!"
+    endof
   endcase
 ;
 

@@ -1,18 +1,16 @@
 type CB = (type: number, tb?: CB | string) => void;
-type Operation = (value: string) => void;
-interface State {
+const send = (cb: CB, type: number, arg?: CB) => cb(type, arg);
+interface FromIterState {
   completed: boolean;
   got1: boolean;
   inloop: boolean;
   done: boolean;
 }
 
-const send = (cb: CB, type: number, arg?: CB) => cb(type, arg);
-
-function loop(
+function fromInterLoop(
   iterator: any,
   sink: CB,
-  { completed, got1, inloop, done }: State
+  { completed, got1, inloop, done }: FromIterState
 ) {
   inloop = true;
   while (inloop) {
@@ -34,17 +32,22 @@ function loop(
   }
 }
 
-const tbSink = (
+const fromIterSinkTB = (
   iterator: any,
   sink: CB,
-  { completed, got1, inloop, done: iterdone }: State
-) => (t: number) => {
+  { completed, got1, inloop, done: iterdone }: FromIterState
+): CB => (type: number) => {
   if (completed) return;
-  if (t === 1) {
+  if (type === 1) {
     got1 = true;
     if (!inloop && !iterdone)
-      loop(iterator, sink, { completed, got1, inloop, done: iterdone });
-  } else if (t === 2) {
+      fromInterLoop(iterator, sink, {
+        completed,
+        got1,
+        inloop,
+        done: iterdone,
+      });
+  } else if (type === 2) {
     completed = true;
   }
 };
@@ -54,13 +57,13 @@ const fromIter = (iterator: any): CB => (
   sink?: CB | string
 ): void => {
   if (type !== 0) return;
-  const state: State = {
+  const state: FromIterState = {
     inloop: false,
     got1: false,
     completed: false,
     done: false,
   };
-  const tb = tbSink(iterator, sink as CB, state);
+  const tb = fromIterSinkTB(iterator, sink as CB, state);
   send(sink as CB, 0, tb);
 };
 
@@ -68,10 +71,12 @@ interface ForEachState {
   talkback?: CB;
 }
 
-const tbSource = (
-  operation: Operation,
-  state: ForEachState
-): CB => (type, data) => {
+type Operation = (value: string) => void;
+
+const forEachSourceTB = (operation: Operation, state: ForEachState): CB => (
+  type,
+  data
+) => {
   if (type === 0) state.talkback = data as CB;
   if (type === 1) operation(data as string);
   if (type === 1 || type === 0) state.talkback?.(1);
@@ -79,7 +84,7 @@ const tbSource = (
 
 const forEach = (operation: (value: string) => void) => (source: CB) => {
   const state: ForEachState = {};
-  const tb = tbSource(operation, state);
+  const tb = forEachSourceTB(operation, state);
   send(source, 0, tb);
 };
 

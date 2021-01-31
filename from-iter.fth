@@ -1,6 +1,5 @@
 \ state is a closure of the form [vars sink fi.iterator proc]
 \ vars is a tuple4 of the form [ completed got1 inloop done ]
-\ TODO use offsets https://www.complang.tuwien.ac.at/forth/gforth/Docs-html/Why-explicit-structure-support_003f.html#Why-explicit-structure-support_003f
 
 : fi.vars ;
 : fi.sink 1 [] ;
@@ -118,15 +117,8 @@
 	0 0 ['] fi.proc closure
 ;
 
-: fromIter = (iterator: any): CB => {
-    const state = {
-        iterator,
-    };
-    return {
-        state,
-        proc: fromIterProc,
-    };
-};
+
+
 
 : forEachSourceProc: Proc = (state, type, data?) => {
     const feState = state as ForEachState;

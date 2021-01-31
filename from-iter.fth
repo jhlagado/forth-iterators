@@ -54,7 +54,7 @@
   drop                                  \ drop state
 ;
 
-: fi.sink-data                          \ state -- 
+: fi.sink-run                           \ state -- 
   dup >r                                \ state                       //  save state
   fi.vars @                             \ vars
   dup fi.got1 true swap !               \ vars                        //  got1 = true
@@ -80,7 +80,7 @@
           drop                          \ --                          //  drop state
         endof
         1 of
-          fi.sink-data                  \ --
+          fi.sink-run                  \ --
         endof
         2 of
           fi.vars @ 
@@ -90,10 +90,6 @@
     then
 ;    
     
-: fi.sink-tb 													  \ var sink iterator -- 
-		['] fi.sink-proc closure					  \ vars
-;    
-
 : fi.proc																\ state sink type
 		case                                
 			0 of															\ state sink
@@ -113,35 +109,6 @@
 		endcase
 ;
 
-: from-iter															\ iterator
+: from-iter															\ iterator -- cb
 	0 0 ['] fi.proc closure
 ;
-
-
-
-
-: forEachSourceProc: Proc = (state, type, data?) => {
-    const feState = state as ForEachState;
-    if (type === 0) feState.talkback = data as CB;
-    if (type === 1) feState.operation(data as string);
-    if ((type === 1 || type === 0) && feState.talkback) send(feState.talkback, 1);
-};
-
-: forEachSourceTB = (state: ForEachState): CB => {
-    return { state, proc: forEachSourceProc };
-};
-
-: forEach = (operation: (value: string) => void) => (source: CB) => {
-    const state: ForEachState = {
-        operation,
-    };
-    const tb = forEachSourceTB(state);
-    send(source, 0, tb);
-};
-
-: printOp = (x) => console.log(x) ;
-
-10 50 10 range
-const source = fromIter(fi.iterator);
-
-forEach(printOp)(source);

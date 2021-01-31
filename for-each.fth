@@ -36,9 +36,6 @@
 
 : print-op . ;
 
-: test-for-each
-;
-
 : test_for-each 
   cr cr ." test for-each" cr
   

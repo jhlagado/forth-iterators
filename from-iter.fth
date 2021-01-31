@@ -1,77 +1,77 @@
-\ state is a closure of the form [vars sink iterator proc]
+\ state is a closure of the form [vars sink fi.iterator proc]
 \ vars is a tuple4 of the form [ completed got1 inloop done ]
 \ TODO use offsets https://www.complang.tuwien.ac.at/forth/gforth/Docs-html/Why-explicit-structure-support_003f.html#Why-explicit-structure-support_003f
 
-: .vars ;
-: .sink 1 [] ;
-: .iterator 2 [] ;
-: .completed ;
-: .got1 1 [] ;
-: .inloop 2 [] ;
-: .done 3 [] ;
+: fi.vars ;
+: fi.sink 1 [] ;
+: fi.iterator 2 [] ;
+: fi.completed ;
+: fi.got1 1 [] ;
+: fi.inloop 2 [] ;
+: fi.done 3 [] ;
 
-: fiInteratorNext                       \ state -- value done?
-  dup .vars @ swap                      \ vars state 
-  .iterator                             \ vars iterator
-  0 run                                 \ vars value done?            // run iterator
+: fi.iterator-next                      \ state -- value done?
+  dup fi.vars @ swap                    \ vars state 
+  fi.iterator                           \ vars fi.iterator
+  0 run                                 \ vars value done?            // run fi.iterator
   swap >r                               \ vars done?                  // save value
   dup >r                                \ vars done?                  // save copy done?
-  swap .done !                          \ --                          // state.vars.done = done?
+  swap fi.done !                        \ --                          // statefi.varsfi.done = done?
   >r >r swap                            \ value done?
 ;
 
-: fiSinkDestroy                         \ state -- 
-  dup .sink                             \ state sink 
+: fi.sink-destroy                       \ state -- 
+  dup fi.sink                           \ state sink 
   0 destroy                             \ state                       //  send a 2 to sink
-  .vars @ .inloop                       \ inloop
+  fi.vars @ fi.inloop                   \ inloop
   false swap !                          \                             //  inloop = false
 ;
 
-: fiSinkSend                            \ state value done? -- state
+: fi.sink-send                          \ state value done? -- state
   if
     drop                                \ state                       // drop value
-    dup fiSinkDestroy                   \ state
+    dup fi.sink-destroy                 \ state
   else
-    over .sink                          \ state value sink
+    over fi.sink                        \ state value sink
     swap run                            \ state                       //  send a 1 and a value to sink
   then
 ;
 
-: fiSinkLoop                            \ state --
+: fi.sink-loop                          \ state --
   begin
-    dup .vars @ .inloop @               \ state inloop
+    dup fi.vars @ fi.inloop @           \ state inloop
   while
-    dup .vars @                         \ state vars
-    dup .got1 @ invert                  \ state vars !got1
-    over .completed @                   \ state vars !got1 completed
+    dup fi.vars @                       \ state vars
+    dup fi.got1 @ invert                \ state vars !got1
+    over fi.completed @                 \ state vars !got1 completed
     or if                               \ state vars                  //  if (!got || completed)
-      .inloop false swap !              \ state                       //  state.vars.inloop = false
+      fi.inloop false swap !            \ state                       //  statefi.varsfi.inloop = false
     else
-      .got1 false swap !                \ state                       //  state.vars.got1 = false
-      fiInteratorNext                   \ state value done?           //  run iterator
-      fiSinkSend                        \ state
+      fi.got1 false swap !              \ state                       //  statefi.varsfi.got1 = false
+      fi.iterator-next                  \ state value done?           //  run fi.iterator
+      fi.sink-send                      \ state
     then
   repeat
   drop                                  \ drop state
 ;
 
-: fiSinkData                            \ state -- 
+: fi.sink-data                          \ state -- 
   dup >r                                \ state                       //  save state
-  .vars @                               \ vars
-  dup .got1 true swap !                 \ vars                        //  got1 = true
-  dup .inloop @                         \ vars inloop
-  over .done @                          \ vars inloop done
+  fi.vars @                             \ vars
+  dup fi.got1 true swap !               \ vars                        //  got1 = true
+  dup fi.inloop @                       \ vars inloop
+  over fi.done @                        \ vars inloop done
   or invert                             \ if !(inloop || done)
   if                                   
-    .inloop true swap !                 \ inloop = true
+    fi.inloop true swap !               \ inloop = true
   then
   r>                                    \ state 
-  fiSinkLoop                            \
+  fi.sink-loop                          \
 ;
 
-: fiSinkProc                            \ state type arg -- 
-    drop                                \ state type
-    over .vars @ .completed @           \ state type completed
+: fi.sink-proc                          \ state arg type -- 
+    swap drop                           \ state type
+    over fi.vars @ fi.completed @       \ state type completed
     if 
       drop                              \ drop type
       drop                              \ drop state
@@ -81,29 +81,42 @@
           drop                          \ --                          //  drop state
         endof
         1 of
-          fiSinkData                    \ --
+          fi.sink-data                  \ --
         endof
         2 of
-          .vars @ .completed true !     \ --                        //  completed = true
+          fi.vars @ 
+					fi.completed true ! 				  \ --                        //  completed = true
         endof
       endcase
     then
 ;    
     
-    
+: fi.sink-tb 													  \ var sink iterator -- 
+		['] fi.sink-proc closure					  \ vars
+;    
 
-: fromIterSinkTB = (state: FromIterState): CB => {
-    return { state, proc: fromIterSinkProc };
-};
+: fi.proc																\ state sink type
+		case                                
+			0 of															\ state sink
+				dup >r  												\															// save sink
+			  swap 														\ sink state
+				@																\ sink iterator
+				false false false false 
+				heap4_new tuple4								\ sink iterator vars
+				rot															\ vars sink iterator
+				['] fi.sink-proc 					  		\ vars sink iterator proc
+				closure													\ tb
+				r> swap													\ sink tb
+				init 														\ --
+			endof
+			drop                              \ drop sink
+      drop                              \ drop state
+		endcase
+;
 
-: fromIterProc: Proc = (state, type, sink): void => {
-    if (type !== 0) return;
-    const state = state as FromIterState;
-    state.sink = sink as CB;
-    state.vars = { inloop: false, got1: false, completed: false, done: false };
-    const tb = fromIterSinkTB(state as FromIterState);
-    send(sink as CB, 0, tb);
-};
+: from-iter															\ iterator
+	0 0 ['] fi.proc closure
+;
 
 : fromIter = (iterator: any): CB => {
     const state = {
@@ -137,6 +150,6 @@
 : printOp = (x) => console.log(x) ;
 
 10 50 10 range
-const source = fromIter(iterator);
+const source = fromIter(fi.iterator);
 
 forEach(printOp)(source);

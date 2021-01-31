@@ -17,7 +17,7 @@
 
 \ send a signal to closure              \ adr arg type
 : send
-  >r                                    \ adr arg >>>> save type
+  >r                                    \ adr arg  //  save type
   over [last] @                         \ adr arg proc
   r> swap                               \ adr arg type proc 
   execute

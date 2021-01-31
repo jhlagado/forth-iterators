@@ -3,7 +3,7 @@
 
 : range                                 \ start end step -- iter
   -rot over -                           \ step start amount
-  >r swap                               \ start step >>>> amount
+  >r swap                               \ start step  //  amount
   ['] +                                 \ increment function
   iterate                               \ iter 
   r> 

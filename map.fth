@@ -9,7 +9,7 @@
       drop                                \ drop arg
       dup                                 \ iter iter[0]  
       @                                   \ iter iter0
-      0 run >r                              \ iter value >>>> save done
+      0 run >r                              \ iter value  //  save done
       swap 1 [] @                         \ value effect
       execute                             \ value1 done
       r>

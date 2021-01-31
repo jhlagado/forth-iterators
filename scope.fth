@@ -8,8 +8,8 @@
 \ link tuple4 to scope 
 : link_scope                            \ (adr --)
   dup                                   \ adr adr
-  scope_ptr swap [last] !               \ adr       >>>> adr[last] = scope_ptr
-  to scope_ptr                          \           >>>> scope_ptr = adr
+  scope_ptr swap [last] !               \ adr        //  adr[last] = scope_ptr
+  to scope_ptr                          \            //  scope_ptr = adr
 ;
 
 \ unlink tuple4 from scope
@@ -22,7 +22,7 @@
 : s(abc                                 \ n n n --- adr 
   heap4_isfull
     abort" Cannot create scope"
-  scope_ptr heap4_new tuple4              \ adr >>>> adr[3] = scope_ptr
+  scope_ptr heap4_new tuple4              \ adr  //  adr[3] = scope_ptr
   to scope_ptr                          \ scope_ptr = adr
 ;
 

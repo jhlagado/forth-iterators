@@ -14,10 +14,10 @@
       drop                                \ drop arg
       dup @                               \ iter iter0
       0 run                                 \ iter value0 done0?  
-      swap >r >r                          \ iter  >>>> save value0 done0 
+      swap >r >r                          \ iter   //  save value0 done0 
       dup 2 []                            \ iter iter[2] 
-      dup @ >r                            \ iter iter[2] >>>> save index
-      1 swap +!                           \ iter  >>>>   iter[2]++  
+      dup @ >r                            \ iter iter[2]  //  save index
+      1 swap +!                           \ iter   //    iter[2]++  
       1 [] @                              \ limit 
       r>                                  \ limit index
       <= r> or                            \ DONE  (ie. done? || done0?)

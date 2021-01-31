@@ -43,8 +43,8 @@
 \ free tuple4, add to free list          ( adr -- )
 : heap4_free                          
   dup                                   \ adr adr
-  free_ptr swap !                       \ adr >>>> free_ptr -> adr[0]
-  to free_ptr                           \ >>>> adr -> free_ptr
+  free_ptr swap !                       \ adr  //  free_ptr -> adr[0]
+  to free_ptr                           \  //  adr -> free_ptr
 ;
 
 0  value t1

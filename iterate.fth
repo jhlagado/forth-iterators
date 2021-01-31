@@ -12,12 +12,12 @@
     endof
     1 of 
       drop                                \ drop arg
-      dup @ dup >r swap                   \ value iter >>>> save value   
+      dup @ dup >r swap                   \ value iter  //  save value   
       dup 1 [] @ swap                     \ value arg iter
       dup 2 [] @ swap                     \ value arg func iter
-      >r                                  \ value arg func >>>> save iter
+      >r                                  \ value arg func  //  save iter
       execute                             \ value'
-      r> !                                \ >>>> iter[0] = value'
+      r> !                                \  //  iter[0] = value'
       r> 0                                \ value notdone
     endof
     2 of

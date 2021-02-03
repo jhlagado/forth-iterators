@@ -31,6 +31,7 @@
 
 \ Allocate an array                     ( size -- adr )
 : new[] 
+  align
   here >r                               \ save here
   cells allot                           \ allot size * cell 
   r>                                    \ return address of array

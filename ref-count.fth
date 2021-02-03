@@ -17,20 +17,24 @@
   here to rc-end												\ save end adr
 ;
 
-: to-rc						      								\ adr -- adrr
+: rc						      								  \ adr -- adrr
 	heap4-start -													\ delta
 	4 rshift															\ todo: divide by 16
 	rc-start +
 ;
 
+: rc-peek 															\ adr -- adr
+	dup rc @ 									   					\ 														// print rc value
+;
+
 : rc+																		\ adr -- adr									// inc ref count
-	dup to-rc															\ adr adrr
-	1 +!																	\ adr													// sub 1 from ref count
+	dup rc															  \ adr adrr
+	1 swap +!																	\ adr													// sub 1 from ref count
 ;
 
 : rc-																		\ adr -- adr									// dec ref count
-	dup to-rc															\ adr adrr
-	-1 +!																	\ adr													// sub 1 from ref count
+	dup rc															  \ adr adrr
+	-1 swap +!														\ adr													// sub 1 from ref count
 ;
 
 : get-val                               \ ref -- val    							// ref RC-
@@ -62,11 +66,19 @@
 	rc- drop
 ;
 
-: test-rc-proc 
+\ new ref counted closure               \ n1 n2 n3 proc -- adr
+: rc-closure  
+  heap4-isfull
+    abort" Cannot create closure"
+  heap4-new tuple4                           
+	rc+
+;
+
+: test-rc-proc1 
   case 
     0 of
-      drop                            	\ drop arg
-      dropr                             \ drop adr
+      drop                             	\ drop arg
+			dropr                             \ drop adr
       ." init rc!"
     endof
     1 of 
@@ -77,17 +89,26 @@
     endof
     2 of
       drop                              \ drop arg
+			rc-
       dropr                             \ drop adr
       ." destroy closure!"
     endof
   endcase
 ;
 
-: test-scope
+: test-rc
   cr cr ." test ref count" cr
   10 rc-init 
-  1 2 3 ['] test-rc-proc closure rc+
-  dup 0 init 
-  dup 0 run 
-  rc- 0 destroy
+  1 2 3 ['] test-rc-proc1 rc-closure 
+	rc-peek 1 assert
+	
+	dupr 0 init 
+	rc-peek 1 assert
+  
+	dupr 0 run 
+	rc-peek 1 assert
+	
+	dupr 0 destroy
+  rc-peek 0 assert
+	drop
 ;

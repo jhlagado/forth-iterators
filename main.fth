@@ -4,7 +4,7 @@ include tuple4.fth
 include heap4.fth
 include scope.fth
 include closure.fth
-\ include ref-count.fth
+include ref-count.fth
 \ include iterate.fth
 \ include take.fth
 \ include range.fth
@@ -16,7 +16,7 @@ test-heap4
 test-tuple 
 test-scope 
 test-closure 
-\ test-rc 
+test-rc 
 \ test-iterate
 \ test-take
 \ test-range

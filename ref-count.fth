@@ -1,63 +1,93 @@
-\ -reference counting 
+\ rerence counting 
 \ this library augments the heap4 references with a count value so that
 \ deallocation can occur if this value falls to 0. This is meant to work in
 \ concert with closures which are in control of their own life cycles and 
 \ that of their child references. 
 
-\ initialize the heap via this rc_init
+\ initialize the heap via this rc-init
 
-0 value rc4-start
-0 value rc4-end
+0 value rc-start
+0 value rc-end
 
-\ allot a new rc4 array                   size --  
-: rc4-init                              
-  dup heap4_init												\ allocate a heap of given capacity
-	new[]                                 \ allocate a rc4 array matching capacity 
-  to rc4-start                          \ save start adr 
-  here to rc4-end												\ save end adr
+\ allot a new rc array                   size --  
+: rc-init                              
+  dup heap4-init												\ allocate a heap of given capacity
+	new[]                                 \ allocate a rc array matching capacity 
+  to rc-start                          	\ save start adr 
+  here to rc-end												\ save end adr
 ;
 
-: to-rc4						      							\ adr -- radr
-	heap4_start -													\ delta
-	16 /																	\ todo: use shift right 4 bits
-	rc4-start +
+: to-rc						      								\ adr -- adrr
+	heap4-start -													\ delta
+	4 rshift															\ todo: divide by 16
+	rc-start +
 ;
 
-: rc4+																	\ adr -- adr									// inc ref count
-	dup to-rc4														\ adr radr
+: rc+																		\ adr -- adr									// inc ref count
+	dup to-rc															\ adr adrr
 	1 +!																	\ adr													// sub 1 from ref count
 ;
 
-: rc4-																	\ adr -- adr									// dec ref count
-	dup to-rc4														\ adr radr
+: rc-																		\ adr -- adr									// dec ref count
+	dup to-rc															\ adr adrr
 	-1 +!																	\ adr													// sub 1 from ref count
 ;
 
 : get-val                               \ ref -- val    							// ref RC-
-	rc4- @
+	rc- @
 ;
 
-: get-ref                               \ ref -- ref         					// ref RC- -ref RC+
-	get-val rc4+
+: getr                               		\ ref -- ref         					// ref RC- ref RC+
+	get-val rc+
 ;
 
 : set-val                               \ val ref --    							// ref RC-
-	rc4- !
+	rc- !
 ;
 
-: set-ref                               \ ref1 ref2 --         				// ref1 RC- ref2 RC-
-	swap rc4- swap
+: setr                               		\ ref1 ref2 --         				// ref1 RC- ref2 RC-
+	swap rc- swap
 	set-val
 ;
 
-: dup-ref                               \ ref -- ref ref      				// ref RC+
-	dup rc4+ 
+: dupr                               		\ ref -- ref ref      				// ref RC+
+	dup rc+ 
 ;
 
-: over-ref                              \ ref val -- ref val ref      // ref RC+
-	over rc4+
+: overr                              		\ ref val -- ref val ref      // ref RC+
+	over rc+
 ;
 
-: drop-ref                              \ ref --                      // ref RC-
-	rc4- drop
+: dropr                              		\ ref --                      // ref RC-
+	rc- drop
+;
+
+: test-rc-proc 
+  case 
+    0 of
+      drop                            	\ drop arg
+      dropr                             \ drop adr
+      ." init rc!"
+    endof
+    1 of 
+      drop
+      dup tuple4> drop                	\ n n n
+      3 assert 2 assert 1 assert   
+			dropr                           
+    endof
+    2 of
+      drop                              \ drop arg
+      dropr                             \ drop adr
+      ." destroy closure!"
+    endof
+  endcase
+;
+
+: test-scope
+  cr cr ." test ref count" cr
+  10 rc-init 
+  1 2 3 ['] test-rc-proc closure rc+
+  dup 0 init 
+  dup 0 run 
+  rc- 0 destroy
 ;

@@ -10,7 +10,7 @@
   take                               \ take <end>
 ;
 
-: test_range 
+: test-range 
   cr cr ." test range" cr
   1 3 1 range 
   dup 0 run 0 assert 1 assert 

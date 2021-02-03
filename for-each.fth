@@ -36,7 +36,7 @@
 
 : print-op . ;
 
-: test_for-each 
+: test-for-each 
   cr cr ." test for-each" cr
   
   ['] print-op from-iter

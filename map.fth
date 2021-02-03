@@ -1,4 +1,4 @@
-: map_iter                              \ iter -- val done?
+: map-iter                              \ iter -- val done?
   case 
     0 of
       drop                                \ drop arg
@@ -22,11 +22,11 @@
   endcase 
 ;
 
-: map 0 ['] map_iter closure ;         \ iter0 effect0 -- iter
+: map 0 ['] map-iter closure ;         \ iter0 effect0 -- iter
 
 : add10 10 + ;                        \ example effect
 
-: test_map 
+: test-map 
   cr cr ." test map" cr
   0 2 1 range ['] add10 map 
   dup 0 init

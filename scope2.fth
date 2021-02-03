@@ -1,48 +1,48 @@
 \ depends on heap4 (which needs to be initialized first)
 \ scopes are tuples which are linked together with pointers 
-\ in the last index (TUPLE4_LAST). A pointer to the head of 
-\ this list is stored in scope_ptr
+\ in the last index (TUPLE4-LAST). A pointer to the head of 
+\ this list is stored in scope-ptr
 
-0 value scopestack_start
-0 value scopestack_end
-0 value scope_ptr
+0 value scopestack-start
+0 value scopestack-end
+0 value scope-ptr
 
 \ allot a new scopes and init ptrs        ( size -- ) 
-: scopestack_init                             \ size is number of tuples
-  TUPLE4_SIZE * new[]                    \ array capacity * tuple4 size
-  dup to scopestack_start                     \ adr  
-  to scope_ptr                           \ heap4 ptr to start
-  here to scopestack_end
+: scopestack-init                             \ size is number of tuples
+  TUPLE4-SIZE * new[]                    \ array capacity * tuple4 size
+  dup to scopestack-start                     \ adr  
+  to scope-ptr                           \ heap4 ptr to start
+  here to scopestack-end
 ;
 
 \ checks if scopes has free space         \ ( -- flag) 
-: scopestack_isfull
-    scopestack_end scope_ptr <=                \ check if room left on heap4
+: scopestack-isfull
+    scopestack-end scope-ptr <=                \ check if room left on heap4
 ;
 
 : s(                                 \ n n n n --- adr 
-  scopestack_isfull
+  scopestack-isfull
     abort" Cannot create scope"
-  scope_ptr >tuple4
-  scope_ptr TUPLE4_CELLS +              
-  to scope_ptr                          
+  scope-ptr >tuple4
+  scope-ptr TUPLE4-CELLS +              
+  to scope-ptr                          
 ;
 
 : )s  
-  scope_ptr TUPLE4_CELLS -              
-  to scope_ptr                          
+  scope-ptr TUPLE4-CELLS -              
+  to scope-ptr                          
 ;
 
-: >a scope_ptr -4 [] ! ;                      \ ( -- n ) 
-: >b scope_ptr -3 [] ! ;
-: >c scope_ptr -2 [] ! ;
-: >d scope_ptr -1 [] ! ;
-: a> scope_ptr -4 [] @ ;                      \ ( n -- )
-: b> scope_ptr -3 [] @ ;
-: c> scope_ptr -2 [] @ ;
-: d> scope_ptr -1 [] @ ;
+: >a scope-ptr -4 [] ! ;                      \ ( -- n ) 
+: >b scope-ptr -3 [] ! ;
+: >c scope-ptr -2 [] ! ;
+: >d scope-ptr -1 [] ! ;
+: a> scope-ptr -4 [] @ ;                      \ ( n -- )
+: b> scope-ptr -3 [] @ ;
+: c> scope-ptr -2 [] @ ;
+: d> scope-ptr -1 [] @ ;
 
-: test_scopestack_1 
+: test-scopestack-1 
   0 0 0 0 s(
     100 >a
     200 >b
@@ -52,7 +52,7 @@
   )s 
 ;
 
-: test_scopestack_2 
+: test-scopestack-2 
   0 0 s(
      3 >c
      4 >d
@@ -60,24 +60,24 @@
   )s 
 ;
 
-: test_scopestack_3a 
+: test-scopestack-3a 
   s(
     a> b> c> d> + + +
   )s 
 ;
 
-: test_scopestack_3 
+: test-scopestack-3 
   0 0 s(
     400 >c
-    100 100 100 100 test_scopestack_3a >d
+    100 100 100 100 test-scopestack-3a >d
     a> b> c> d> - + - 0 assert
   )s 
 ;
 
-: test_scope
+: test-scope
   cr cr ." test scope" cr
-  10 scopestack_init 
-  test_scopestack_1
-  1 2 test_scopestack_2
-  500 500 test_scopestack_3
+  10 scopestack-init 
+  test-scopestack-1
+  1 2 test-scopestack-2
+  500 500 test-scopestack-3
 ;

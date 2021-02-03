@@ -3,7 +3,7 @@
 \ eg. 
 \ : integer 0 ['] + iterate ;
 
-: iterate_iter                            \ iter -- val done?
+: iterate-iter                            \ iter -- val done?
   case 
     0 of
       drop                                \ drop arg
@@ -28,9 +28,9 @@
   endcase 
 ;
 
-: iterate ['] iterate_iter closure ;     \ initial arg func -- iter
+: iterate ['] iterate-iter closure ;     \ initial arg func -- iter
 
-: test_iterate 
+: test-iterate 
   cr cr ." test iterate" cr
   0 2 ['] + iterate 
   dup 0 run 0 assert 0 assert 

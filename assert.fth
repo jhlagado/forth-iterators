@@ -1,6 +1,6 @@
-: assert_then drop drop ." OK" ;
-: assert_else ." ERROR: asserted " . ." got " . cr abort ;
-: assert 2dup = if assert_then else assert_else then cr ;
+: assert-then drop drop ." OK" ;
+: assert-else ." ERROR: asserted " . ." got " . cr abort ;
+: assert 2dup = if assert-then else assert-else then cr ;
 
 \ see: simple-tester 
 \ http://www.euroforth.org/ef19/papers/hoffmanna.pdf

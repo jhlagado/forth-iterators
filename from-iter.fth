@@ -97,7 +97,7 @@
 			  swap 														\ sink state
 				@																\ sink iterator
 				false false false false 
-				heap4_new tuple4								\ sink iterator vars
+				heap4-new tuple4								\ sink iterator vars
 				rot															\ vars sink iterator
 				['] fi.sink-proc 					  		\ vars sink iterator proc
 				closure													\ tb

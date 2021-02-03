@@ -1,7 +1,7 @@
 \ depends on heap4 (which needs to be initialized first)
 
 \ a closure is a tuple4 which has a ptr to a procedure in
-\ its last index (TUPLE4_LAST). Normally a closure is
+\ its last index (TUPLE4-LAST). Normally a closure is
 \ executed by passing its address on the stack, an arg and a signal
 \ a signal can be 0 = INIT, 1 = RUN, 2 = DESTROY
 \ and calling send
@@ -10,9 +10,9 @@
 
 \ new closure                           \ n1 n2 n3 proc -- adr
 : closure  
-  heap4_isfull
+  heap4-isfull
     abort" Cannot create closure"
-  heap4_new tuple4                           
+  heap4-new tuple4                           
 ;
 
 \ send a signal to closure              \ adr arg type
@@ -33,10 +33,10 @@
 : destroy
   over >r                               \ adr arg
   2 send
-  r> heap4_free
+  r> heap4-free
 ;  
 
-: test_proc 
+: test-closure-proc 
   case 
     0 of
       drop                                \ drop arg
@@ -56,10 +56,10 @@
   endcase
 ;
 
-: test_closure 
-  100 heap4_init 
+: test-closure 
+  100 heap4-init 
   cr cr ." test closure" cr
-  1 2 3 ['] test_proc closure
+  1 2 3 ['] test-closure-proc closure
   dup 0 init 
   dup 0 run 
   0 destroy

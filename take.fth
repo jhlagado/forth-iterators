@@ -3,7 +3,7 @@
 \ eg. 
 \ : integer 0 ['] + take ;
 
-: take_iter                            \ iter -- val done?
+: take-iter                            \ iter -- val done?
   case 
     0 of
       drop                                \ drop arg
@@ -31,9 +31,9 @@
   endcase 
 ;
 
-: take 0 ['] take_iter closure ;          \ iter limit -- iter
+: take 0 ['] take-iter closure ;          \ iter limit -- iter
 
-: test_take 
+: test-take 
   cr cr ." test take" cr
   0 1 ['] + iterate 2 take 
   dup 0 init

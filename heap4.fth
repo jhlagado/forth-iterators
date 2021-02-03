@@ -10,7 +10,7 @@
 
 \ allot a new heap4 and init ptrs        ( size -- ) 
 : heap4_init                             \ size is number of tuples
-  TUPLE4_SIZE * new[]                       \ array capacity * tuple4 size
+  TUPLE4_SIZE * new[]                    \ array capacity * tuple4 size
   dup to heap4_start                     \ adr  
   to heap4_ptr                           \ heap4 ptr to start
   here to heap4_end
@@ -45,6 +45,15 @@
   dup                                   \ adr adr
   free_ptr swap !                       \ adr  //  free_ptr -> adr[0]
   to free_ptr                           \  //  adr -> free_ptr
+;
+
+\ detect a heap ptr
+: heap4_is-ptr                          \ adr -- bool
+    dup heap_start >=                   \ adr bool
+    over heap_end <=                    \ adr bool bool
+    and                                 \ adr bool
+    swap 15 and                         \ bool bool                  // mask bottom 4 bits
+    and                                 \ bool
 ;
 
 0  value t1

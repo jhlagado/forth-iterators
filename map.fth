@@ -30,9 +30,12 @@
   cr cr ." test map" cr
   0 2 1 range ['] add10 map 
   dup 0 init
-  dup 0 run 0 assert 10 assert
-  dup 0 run 0 assert 11 assert
-  dup 0 run -1 assert 12 assert
+  dup 0 run 0 100 assert 10 100 assert
+
+  dup 0 run 0 100 assert 11 100 assert
+
+  dup 0 run -1 100 assert 12 100 assert
+
   0 destroy
   cr
 ;

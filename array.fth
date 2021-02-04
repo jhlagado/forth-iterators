@@ -44,5 +44,6 @@
   1 2 3 
   test-arr 3 >[] 
   test-arr 3 []>  
-  - - 2 assert
+  - - 2 100 assert
+
 ;

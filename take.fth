@@ -37,9 +37,9 @@
   cr cr ." test take" cr
   0 1 ['] + iterate 2 take 
   dup 0 init
-  dup 0 run 0 assert 0 assert 
-  dup 0 run 0 assert 1 assert 
-  dup 0 run -1 assert 2 assert 
+  dup 0 run 0 100 assert 0 100 assert 
+  dup 0 run 0 100 assert 1 100 assert 
+  dup 0 run -1 100 assert 2 100 assert 
   0 destroy 
   cr 
 ;

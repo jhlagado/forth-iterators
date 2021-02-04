@@ -19,9 +19,9 @@
 : test-foreach 
   cr cr ." test foreach" cr
   0 3 1 range ['] dup. foreach
-  x 2 assert 
-  y 2 assert 
-  c 3 assert 
+  x 2 100 assert 
+  y 2 100 assert 
+  c 3 100 assert 
   0 destroy
   cr
 ;

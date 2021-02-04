@@ -12,7 +12,7 @@
 : closure  
   heap4-isfull
     abort" Cannot create closure"
-  heap4-new tuple4                           
+  heap4-new                           
 ;
 
 \ send a signal to closure              \ adr arg type
@@ -46,7 +46,7 @@
     1 of 
       drop
       tuple4> drop                        \ n n n
-      3 assert 2 assert 1 assert                              
+      3 100 assert 2 100 assert 1 100 assert                              
     endof
     2 of
       drop                                \ drop arg

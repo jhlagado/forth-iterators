@@ -33,9 +33,9 @@
 : test-iterate 
   cr cr ." test iterate" cr
   0 2 ['] + iterate 
-  dup 0 run 0 assert 0 assert 
-  dup 0 run 0 assert 2 assert 
-  dup 0 run 0 assert 4 assert 
+  dup 0 run 0 100 assert 0 100 assert 
+  dup 0 run 0 100 assert 2 100 assert 
+  dup 0 run 0 100 assert 4 100 assert 
   0 destroy  
   cr
 ;

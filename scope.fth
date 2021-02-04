@@ -22,7 +22,7 @@
 : s(abc                                 \ n n n --- adr 
   heap4-isfull
     abort" Cannot create scope"
-  scope-ptr heap4-new tuple4              \ adr  //  adr[3] = scope-ptr
+  scope-ptr heap4-new              \ adr  //  adr[3] = scope-ptr
   to scope-ptr                          \ scope-ptr = adr
 ;
 
@@ -54,12 +54,14 @@
   100 >a
   200 >b
   300 >c
-  a> b> c> - + 0 assert
+  a> b> c> - + 0 100 assert
+
 )s ;
 
 : test-scope-2 s(ab
   3 >c
-  a> b> c> - + 0 assert
+  a> b> c> - + 0 100 assert
+
 )s ;
 
 : test-scope-3a s(abc
@@ -70,7 +72,8 @@
   100 200 300 test-scope-3a
   a> + 
   b> +
-  100 assert
+  100 100 assert
+
 )s ;
 
 : test-scope

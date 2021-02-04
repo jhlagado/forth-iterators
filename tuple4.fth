@@ -14,5 +14,6 @@ TUPLE4-SIZE 1 - constant TUPLE4-LAST
   cr cr ." test tuple4" cr
   0 1 2 3 here tuple4 
   tuple4>  
-  - + + 0 assert
+  - + + 0 100 assert
+
 ;

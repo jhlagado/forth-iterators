@@ -48,7 +48,8 @@
     200 >b
     300 >c
     400 >d
-    a> b> c> d> - + - 0 assert
+    a> b> c> d> - + - 0 100 assert
+
   )s 
 ;
 
@@ -56,7 +57,8 @@
   0 0 s(
      3 >c
      4 >d
-    a> b> c> d> - + - 0 assert
+    a> b> c> d> - + - 0 100 assert
+
   )s 
 ;
 
@@ -70,7 +72,8 @@
   0 0 s(
     400 >c
     100 100 100 100 test-scopestack-3a >d
-    a> b> c> d> - + - 0 assert
+    a> b> c> d> - + - 0 100 assert
+
   )s 
 ;
 

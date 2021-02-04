@@ -11,28 +11,28 @@
 0 value rc-start
 0 value rc-end
 
-\ allot a new rc array                   size --  
+\ allot a new >rc array                   size --  
 : rc-init                              
   dup heap4-init												\ allocate a heap of given capacity
-	new[]                                 \ allocate a rc array matching capacity 
+	new[]                                 \ allocate a >rc array matching capacity 
   to rc-start                          	\ save start adr 
   here to rc-end												\ save end adr
 	rc-end rc-start do 0 i ! loop					\ initalize to zeroes
 ;
 
-: rc						      								  \ adr -- adrr
+: >rc 					      								  \ adr -- rc-adr
 	heap4-start -													\ delta
 	4 rshift															\ todo: divide by 16
 	rc-start +
 ;
 
 : rc+																		\ adr -- adr									// inc ref count
-	dup rc															  \ adr adrr
+	dup >rc 														  \ adr adrr
 	1 swap +!														  \ adr													// sub 1 from ref count
 ;
 
 : rc-																		\ adr -- adr									// dec ref count
-	dup rc															  \ adr adrr
+	dup >rc 														  \ adr adrr
   heap4-isfull 
     abort" ref count already at 0!"
 	-1 swap +!														\ adr													// sub 1 from ref count
@@ -54,7 +54,7 @@
     2 of
       drop                              \ drop arg
 			dup @ rc- drop
-			rc-                               \ reduce rc 
+			rc-                               \ reduce ref count 
 			rc- drop                          \ drop adr
       ." destroy closure!"
     endof
@@ -68,19 +68,19 @@
 	2 3 ['] test-rc-proc1 
 	
 	closure rc+ 
-	dup rc @ 1 100 assert
+	dup >rc @ 1 100 assert
 
 	dup rc+ 0 init 
-	dup rc @ 1 200 assert
+	dup >rc @ 1 200 assert
 
 	dup rc+ 0 run 
-	dup rc @ 1 300 assert 
+	dup >rc @ 1 300 assert 
 
 	dup rc+ 0 destroy
 
 	dup @
-  dup rc @ 0 400 assert 
+  dup >rc @ 0 400 assert 
 	drop
 	
-	dup rc @ 0 500 assert drop
+	dup >rc @ 0 500 assert drop
 ;

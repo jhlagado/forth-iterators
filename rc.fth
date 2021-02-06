@@ -6,9 +6,11 @@
 
 \ initialize the heap via this rc-init
 \ when creating a new tuple (or closure) or assigning a value to variable or tuple
-\ it is the responsibility of the mutator to change the rc
-\ it is the responsibility of the creator of a data item to increase the rc
-\ it is the responsibility of the :destroy case to reduce the rc 
+\ it is the responsibility of the: 
+\ creator of the closure to increase the rc
+\ creator of the closure to decrease the rc
+\ mutating routines to change the rc (assign rc+, remove rc-)
+\ :destroy routines to decrease rc of children
 
 0 value rc-start
 0 value rc-end
@@ -84,20 +86,24 @@
     :destroy of
       drop                              \ drop arg
 			dup @ rc- drop                    \ rc- tuple
-			rc-                               \ rc- state 
 			drop                              \ drop adr
       ." :destroy closure!"
     endof
   endcase
 ;
 
+: test-rc-creator
+  10 20 30 40 heap4-new rc+ .ref ." allocate tuple " cr
+	2 3 ['] test-rc-proc1 
+	closure .ref ." allocate closure " cr
+;
+
 : test-rc
   cr cr ." test ref count" cr
   10 rc-init 
 
-  10 20 30 40 heap4-new rc+ .ref ." allocate tuple " cr
-	2 3 ['] test-rc-proc1 
-	closure rc+ .ref ." allocate closure " cr
+  test-rc-creator
+  rc+ 
 
   to-rc @ 1 100 assert
 
@@ -108,10 +114,10 @@
 	to-rc @ 1 300 assert 
 
 	dup 0 :destroy send
-	dup @
-  to-rc @ 0 400 assert 
+	dup @ to-rc c@ 0 400 assert 
 	drop
-	
+
+  rc-
 	to-rc @ 0 500 assert drop
 
   cr .s cr

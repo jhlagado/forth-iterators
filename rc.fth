@@ -21,24 +21,25 @@
   c!                                     \ 
 ;
 
-\ allot a new >rc array                   size --  
+\ allot a new to-rc array                   size --  
 : rc-init                              
   dup heap4-init												\ allocate a heap of given capacity
-	new[]                                 \ allocate a >rc array matching capacity 
+	new[]                                 \ allocate a to-rc array matching capacity 
   to rc-start                          	\ save start adr 
   here to rc-end												\ save end adr
 	rc-end rc-start do 0 i ! loop					\ initalize to zeroes
 ;
 
 \ convert ref address to rc address
-: >rc 					      								  \ adr -- rc-adr
-	heap4-start -													\ delta
+: to-rc 					      								\ adr -- adr rc-adr
+	dup
+  heap4-start -													\ delta
 	4 rshift															\ todo: divide by 16
 	rc-start +
 ;
 
 : rc+																		\ adr -- adr									// inc ref count
-	dup >rc 														  \ adr adr-rc
+	to-rc 													    	\ adr adr-rc
   dup c@                                \ adr adr-rc c1
   1 +                                   \ adr adr-rc c+1
   swap c!                               \ adr
@@ -46,11 +47,11 @@
 
 \ print adr and its reference count
 : .ref                                  \ adr -- adr
-  dup cr . dup >rc c@ ." ( " . ." ) "
+  dup cr . to-rc c@ ." ( " . ." ) "
 ;
 
 : rc-																		\ adr -- adr									// dec ref count
-	dup >rc 														  \ adr adr-rc
+	to-rc 														  \ adr adr-rc
   dup c@  
   case
     0 of 
@@ -98,20 +99,20 @@
 	2 3 ['] test-rc-proc1 
 	closure rc+ .ref ." allocate closure " cr
 
-  dup >rc @ 1 100 assert
+  to-rc @ 1 100 assert
 
 	dup 0 :init send 
-	dup >rc @ 1 200 assert
+	to-rc @ 1 200 assert
 
 	dup 0 :run send 
-	dup >rc @ 1 300 assert 
+	to-rc @ 1 300 assert 
 
 	dup 0 :destroy send
 	dup @
-  dup >rc @ 0 400 assert 
+  to-rc @ 0 400 assert 
 	drop
 	
-	dup >rc @ 0 500 assert drop
+	to-rc @ 0 500 assert drop
 
   cr .s cr
 ;

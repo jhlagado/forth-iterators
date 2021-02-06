@@ -5,12 +5,12 @@
 
 : iterate-iter                            \ iter -- val done?
   case 
-    0 of
+    :init of
       drop                                \ drop arg
       drop                                \ drop adr
-      ." init iterate!"
+      ." :init send iterate!"
     endof
-    1 of 
+    :run of 
       drop                                \ drop arg
       dup @ dup >r swap                   \ value iter  //  save value   
       dup 1 [] @ swap                     \ value arg iter
@@ -20,10 +20,10 @@
       r> !                                \  //  iter[0] = value'
       r> 0                                \ value notdone
     endof
-    2 of
+    :destroy of
       drop                                \ drop arg
       drop                                \ drop adr
-      ." destroy iterate!"
+      ." :destroy send iterate!"
     endof
   endcase 
 ;
@@ -33,9 +33,9 @@
 : test-iterate 
   cr cr ." test iterate" cr
   0 2 ['] + iterate 
-  dup 0 run 0 100 assert 0 100 assert 
-  dup 0 run 0 100 assert 2 100 assert 
-  dup 0 run 0 100 assert 4 100 assert 
-  0 destroy  
-  cr
+  dup 0 :run send 0 100 assert 0 100 assert 
+  dup 0 :run send 0 100 assert 2 100 assert 
+  dup 0 :run send 0 100 assert 4 100 assert 
+  0 :destroy send  
+  cr .s cr
 ;

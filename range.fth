@@ -13,9 +13,10 @@
 : test-range 
   cr cr ." test range" cr
   1 3 1 range 
-  dup 0 run 0 100 assert 1 100 assert 
-  dup 0 run 0 100 assert 2 100 assert 
-  dup 0 run -1 100 assert 3 100 assert 
-  0 destroy  
+  dup 0 :run send 0 100 assert 1 100 assert 
+  dup 0 :run send 0 100 assert 2 100 assert 
+  dup 0 :run send -1 100 assert 3 100 assert 
+  0 :destroy send  
+  cr .s cr
 ;
 

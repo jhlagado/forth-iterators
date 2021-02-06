@@ -3,10 +3,10 @@
 
 : fe.source-proc                        state arg type
 		case                                
-			0 of															\ state tb
+			:init of															\ state tb
         swap fe.talkback !
 			endof
-			1 of															\ state data
+			:run of															\ state data
         swap fe.operation @             \ data operation
         execute
 			endof
@@ -17,20 +17,20 @@
 
 : fe.proc
 		case                                
-			0 of															\ state source
+			:init of															\ state source
 			  swap    												\ source state
         @                               \ source operation
 				0
         ['] fe.source-proc 					  	\ source operation 0 proc
 				closure													\ tb
-				init 														\ --
+			:init send 														\ --
 			endof
 			drop                              \ drop sink
       drop                              \ drop state
 		endcase
 ;
 
-: for-each															\ operation -- cb
+: for-each								\ operation -- cb
 	0 0 ['] fe.proc closure
 ;
 
@@ -39,10 +39,10 @@
 : test-for-each 
   cr cr ." test for-each" cr
   
-  ['] print-op from-iter
-  10 50 10 range
-  run
+  10 50 10 range from-iter
+  ['] print-op for-each
+  :run send
   
-  cr
+  cr .s cr
 ;
 

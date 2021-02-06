@@ -23,5 +23,4 @@ test-rc
 \ test-foreach
 \ test-map
 
-cr .s
 cr cr cr 

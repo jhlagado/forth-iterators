@@ -12,7 +12,7 @@
 : fi.iterator-next                      \ state -- value done?
   dup fi.vars @ swap                    \ vars state 
   fi.iterator                           \ vars fi.iterator
-  0 run                                 \ vars value done?            // run fi.iterator
+  0 :run send                                 \ vars value done?            // :run send fi.iterator
   swap >r                               \ vars done?                  // save value
   dup >r                                \ vars done?                  // save copy done?
   swap fi.done !                        \ --                          // statefi.varsfi.done = done?
@@ -21,7 +21,7 @@
 
 : fi.sink-destroy                       \ state -- 
   dup fi.sink                           \ state sink 
-  0 destroy                             \ state                       //  send a 2 to sink
+  0 :destroy send                             \ state                       //  send a 2 to sink
   fi.vars @ fi.inloop                   \ inloop
   false swap !                          \                             //  inloop = false
 ;
@@ -32,7 +32,7 @@
     dup fi.sink-destroy                 \ state
   else
     over fi.sink                        \ state value sink
-    swap run                            \ state                       //  send a 1 and a value to sink
+    swap :run send                            \ state                       //  send a 1 and a value to sink
   then
 ;
 
@@ -47,7 +47,7 @@
       fi.inloop false swap !            \ state                       //  statefi.varsfi.inloop = false
     else
       fi.got1 false swap !              \ state                       //  statefi.varsfi.got1 = false
-      fi.iterator-next                  \ state value done?           //  run fi.iterator
+      fi.iterator-next                  \ state value done?           //  :run send fi.iterator
       fi.sink-send                      \ state
     then
   repeat
@@ -76,13 +76,13 @@
       drop                              \ drop state
     else 
       case                              \ state  
-        0 of
+        :init of
           drop                          \ --                          //  drop state
         endof
-        1 of
+        :run of
           fi.sink-run                  \ --
         endof
-        2 of
+        :destroy of
           fi.vars @ 
 					fi.completed true ! 				  \ --                        //  completed = true
         endof
@@ -92,7 +92,7 @@
     
 : fi.proc																\ state sink type
 		case                                
-			0 of															\ state sink
+			:init of													\ state sink
 				dup >r  												\															// save sink
 			  swap 														\ sink state
 				@																\ sink iterator
@@ -102,13 +102,19 @@
 				['] fi.sink-proc 					  		\ vars sink iterator proc
 				closure													\ tb
 				r> swap													\ sink tb
-				init 														\ --
+			  :init send 											\ --
 			endof
-			drop                              \ drop sink
-      drop                              \ drop state
+			:run of 
+        drop                            \ drop sink
+        drop                            \ drop state
+      endof
+			:destroy of 
+        drop                            \ drop sink
+        drop                            \ drop state
+      endof
 		endcase
 ;
 
 : from-iter															\ iterator -- cb
-	0 0 ['] fi.proc closure
+	0 0 ['] fi.proc closure rc+
 ;

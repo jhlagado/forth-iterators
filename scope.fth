@@ -83,4 +83,6 @@
   test-scope-1
   1 2 test-scope-2
   300 200 test-scope-3
+  
+  cr .s cr
 ;

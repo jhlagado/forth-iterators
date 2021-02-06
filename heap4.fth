@@ -8,7 +8,7 @@
 0 value heap4-ptr
 0 value free-ptr
 
-\ allot a new heap4 and init ptrs        ( size -- ) 
+\ allot a new heap4 and_init ptrs        ( size -- ) 
 : heap4-init                             \ size is number of tuples
   TUPLE4-SIZE * new[]                    \ array capacity * tuple4 size
   dup to heap4-start                     \ adr  
@@ -91,6 +91,7 @@
   heap4-isfull true 100 assert
 
   t2 t4 = true 100 assert
+  cr .s cr
 
 ;
 

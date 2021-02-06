@@ -1,23 +1,23 @@
 : map-iter                              \ iter -- val done?
   case 
-    0 of
+    :init of
       drop                                \ drop arg
       drop                                \ drop adr
-      ." init map!"
+      ." :init send map!"
     endof
-    1 of 
+    :run of 
       drop                                \ drop arg
       dup                                 \ iter iter[0]  
       @                                   \ iter iter0
-      0 run >r                              \ iter value  //  save done
+      0 :run send >r                              \ iter value  //  save done
       swap 1 [] @                         \ value effect
       execute                             \ value1 done
       r>
     endof
-    2 of
+    :destroy of
       drop                                \ drop arg
-      @ 0 destroy
-      ." destroy map!"
+      @ 0 :destroy send
+      ." :destroy send map!"
     endof
   endcase 
 ;
@@ -29,14 +29,14 @@
 : test-map 
   cr cr ." test map" cr
   0 2 1 range ['] add10 map 
-  dup 0 init
-  dup 0 run 0 100 assert 10 100 assert
+  dup 0 :init send
+  dup 0 :run send 0 100 assert 10 100 assert
 
-  dup 0 run 0 100 assert 11 100 assert
+  dup 0 :run send 0 100 assert 11 100 assert
 
-  dup 0 run -1 100 assert 12 100 assert
+  dup 0 :run send -1 100 assert 12 100 assert
 
-  0 destroy
-  cr
+  0 :destroy send
+  cr .s cr
 ;
 

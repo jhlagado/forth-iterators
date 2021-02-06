@@ -45,5 +45,5 @@
   test-arr 3 >[] 
   test-arr 3 []>  
   - - 2 100 assert
-
+  cr .s cr
 ;

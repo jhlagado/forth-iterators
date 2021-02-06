@@ -2,7 +2,7 @@
 : foreach                             
   >r                                      \ store effect
   begin
-    dup 0 run                               \ iter value done?
+    dup 0 :run send                               \ iter value done?
     invert                                \ if done terminate
   while
     r> dup >r execute                     \ execute effect on value
@@ -22,7 +22,7 @@
   x 2 100 assert 
   y 2 100 assert 
   c 3 100 assert 
-  0 destroy
-  cr
+  0 :destroy send
+  cr .s cr
 ;
 

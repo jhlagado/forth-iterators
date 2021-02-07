@@ -17,9 +17,9 @@ test-tuple
 test-scope 
 test-closure 
 test-rc 
-\ test-iterate
-\ test-take
-\ test-range
+test-iterate
+test-take
+test-range
 \ test-foreach
 \ test-map
 

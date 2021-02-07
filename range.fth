@@ -1,3 +1,4 @@
+\ depends on iterate
 \ this iterator proc has a value and a limit in indexes 0 & 1
 \ each iteration inc value by step and then compares value with limit
 

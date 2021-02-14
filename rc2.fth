@@ -75,6 +75,7 @@
     :init of
       drop                             	\ drop arg
 		  drop                              \ drop adr
+		  drop                              \ drop proc
       ." :init rc!"
     endof
     :run of 
@@ -82,43 +83,49 @@
       dup tuple4> drop                	\ n n n
       3 100 assert 2 100 assert drop   
 			drop                           
+		  drop                              \ drop proc
     endof
     :destroy of
       drop                              \ drop arg
 			dup @ rc- drop                    \ rc- tuple
 			drop                              \ drop adr
+		  drop                              \ drop proc
       ." :destroy closure!"
     endof
   endcase
 ;
 
-: test-rc-creator
-  10 20 30 40 heap4-new rc+ .ref ." allocate tuple " cr
-	2 3 ['] test-rc-proc1 
-	closure .ref ." allocate closure " cr
+: test-rc2-creator
+  ['] test-rc-proc1 
+  10 20 30 40 heap4-new rc+ 
+  .ref ." allocate tuple " cr
+	2 3 4
+	closure2 
+  .ref ." allocate closure " cr
 ;
 
-: test-rc
-  cr cr ." test ref count" cr
+: test-rc2
+  cr cr ." test ref 2 count" cr
   10 rc-init 
 
-  test-rc-creator
+  test-rc2-creator
   rc+ 
 
   to-rc @ 1 100 assert
 
-	dup 0 :init send 
+	2dup 0 :init send2 
 	to-rc @ 1 200 assert
 
-	dup 0 :run send 
+	2dup 0 :run send2 
 	to-rc @ 1 300 assert 
 
-	dup 0 :destroy send
+	2dup 0 :destroy send2
 	dup @ to-rc c@ 0 400 assert 
 	drop
 
   rc-
 	to-rc @ 0 500 assert drop
+  drop
 
   cr .s cr
 ;

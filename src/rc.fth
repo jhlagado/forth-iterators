@@ -10,7 +10,7 @@
 \ creator of the closure to increase the rc
 \ creator of the closure to decrease the rc
 \ mutating routines to change the rc (assign rc+, remove rc-)
-\ :destroy routines to decrease rc of children
+\ :stop routines to decrease rc of children
 
 0 value rc-start
 0 value rc-end
@@ -72,11 +72,11 @@
 
 : test-rc-proc1 
   case 
-    :init of
+    :start of
       drop                             	\ drop arg
 		  drop                              \ drop adr
 		  drop                              \ drop proc
-      ." :init rc!"
+      ." :start rc!"
     endof
     :run of 
       drop
@@ -85,12 +85,12 @@
 			drop                           
 		  drop                              \ drop proc
     endof
-    :destroy of
+    :stop of
       drop                              \ drop arg
 			dup @ rc- drop                    \ rc- tuple
 			drop                              \ drop adr
 		  drop                              \ drop proc
-      ." :destroy closure!"
+      ." :stop closure!"
     endof
   endcase
 ;
@@ -113,13 +113,13 @@
 
   to-rc @ 1 100 assert
 
-	2dup 0 :init send2 
+	2dup 0 :start send2 
 	to-rc @ 1 200 assert
 
 	2dup 0 :run send2 
 	to-rc @ 1 300 assert 
 
-	2dup 0 :destroy send2
+	2dup 0 :stop send2
 	dup @ to-rc c@ 0 400 assert 
 	drop
 

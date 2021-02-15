@@ -2,10 +2,10 @@
 
 : constant-proc 
   case 
-    :init of
+    :start of
       drop                             	\ drop sink
 		  drop                              \ drop adr
-      ." :init rc!"
+      ." :start rc!"
     const instance: FromConstantInstance = {
         ...state,
         sink,
@@ -36,13 +36,13 @@
 
   to-rc @ 1 100 assert
 
-	dup 0 :init send 
+	dup 0 :start send 
 	to-rc @ 1 200 assert
 
 	dup 0 :run send 
 	to-rc @ 1 300 assert 
 
-	dup 0 :destroy send
+	dup 0 :stop send
 	dup @ to-rc c@ 0 400 assert 
 	drop
 

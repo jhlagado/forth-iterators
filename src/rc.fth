@@ -95,20 +95,20 @@
   endcase
 ;
 
-: test-rc2-creator
+: test-rc-creator
   ['] test-rc-proc1 
   10 20 30 40 heap4-new rc+ 
   .ref ." allocate tuple " cr
 	2 3 4
-	closure2 
+	closure 
   .ref ." allocate closure " cr
 ;
 
-: test-rc2
+: test-rc
   cr cr ." test ref 2 count" cr
   10 rc-init 
 
-  test-rc2-creator
+  test-rc-creator
   rc+ 
 
   to-rc @ 1 100 assert

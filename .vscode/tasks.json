@@ -6,7 +6,7 @@
         {
             "label": "Run forth",
             "type": "shell",
-            "command": "gforth main.fth -e bye",
+            "command": "gforth src/main.fth -e bye",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

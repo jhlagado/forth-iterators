@@ -13,7 +13,7 @@
 2 constant :destroy
 
 \ new closure                             \ proc n1 n2 n3 n4 -- proc adr
-: closure2  
+: closure  
   heap4-isfull
     abort" Cannot create closure"
   heap4-new                           
@@ -25,7 +25,7 @@
   execute                                 \ proc adr
 ; 
 
-: test-closure2-proc 
+: test-closure-proc 
 
   case 
     :init of
@@ -51,13 +51,13 @@
   drop                                \ drop proc
 ;
 
-: test-closure2 
+: test-closure 
   100 heap4-init 
-  cr cr ." test closure2" cr
+  cr cr ." test closure" cr
 
-  ['] test-closure2-proc
+  ['] test-closure-proc
   1 2 3 4 
-  closure2
+  closure
 
   2dup  0   :init send2 
   2dup  0   :run send2 

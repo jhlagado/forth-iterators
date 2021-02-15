@@ -22,7 +22,7 @@
 ;
 
 : test-constant-creator                 \ n -- 
-  0 0 0 closure2                        \ allocates the tuple
+  0 0 0 closure                        \ allocates the tuple
   ['] test-rc-proc                      \ pushes the proc
   swap
 ;

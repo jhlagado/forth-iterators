@@ -10,7 +10,7 @@
 \ creator of the closure to increase the rc
 \ creator of the closure to decrease the rc
 \ mutating routines to change the rc (assign rc+, remove rc-)
-\ :stop routines to decrease rc of children
+\ :destroy routines to decrease rc of children
 
 0 value rc-start
 0 value rc-end
@@ -72,40 +72,34 @@
 
 : test-rc-proc1 
   case 
-    :start of
+    :init of
       drop                             	\ drop arg
 		  drop                              \ drop adr
-		  drop                              \ drop proc
-      ." :start rc!"
+      ." :init rc!"
     endof
     :run of 
       drop
       dup tuple4> drop                	\ n n n
       3 100 assert 2 100 assert drop   
 			drop                           
-		  drop                              \ drop proc
     endof
-    :stop of
+    :destroy of
       drop                              \ drop arg
 			dup @ rc- drop                    \ rc- tuple
 			drop                              \ drop adr
-		  drop                              \ drop proc
-      ." :stop closure!"
+      ." :destroy closure!"
     endof
   endcase
 ;
 
 : test-rc-creator
-  ['] test-rc-proc1 
-  10 20 30 40 heap4-new rc+ 
-  .ref ." allocate tuple " cr
-	2 3 4
-	closure 
-  .ref ." allocate closure " cr
+  10 20 30 40 heap4-new rc+ .ref ." allocate tuple " cr
+	2 3 ['] test-rc-proc1 
+	closure .ref ." allocate closure " cr
 ;
 
 : test-rc
-  cr cr ." test ref 2 count" cr
+  cr cr ." test ref count" cr
   10 rc-init 
 
   test-rc-creator
@@ -113,19 +107,18 @@
 
   to-rc @ 1 100 assert
 
-	2dup 0 :start send2 
+	dup 0 :init send 
 	to-rc @ 1 200 assert
 
-	2dup 0 :run send2 
+	dup 0 :run send 
 	to-rc @ 1 300 assert 
 
-	2dup 0 :stop send2
+	dup 0 :destroy send
 	dup @ to-rc c@ 0 400 assert 
 	drop
 
   rc-
 	to-rc @ 0 500 assert drop
-  drop
 
   cr .s cr
 ;

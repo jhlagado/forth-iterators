@@ -8,10 +8,7 @@
             "type": "shell",
             "command": "gforth src/main.fth -e bye",
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         }
     ]
 }
